@@ -38,10 +38,10 @@ const cssStyles = `
 `;
 
 const schedule = [
-  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: './Kahvaltı.jpg', hasMorningRoutine: true },
+  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: 'https://avatars.mds.yandex.net/i?id=1882edf4921c08092dfdeff104c95262a077cd33-5129388-images-thumbs&n=13', hasMorningRoutine: true },
   { id: 2, time: '09:00 - 09:45', title: 'Derse Gidiş', desc: 'Kampüse doğru sabah yolculuğu. Cam kenarından akıp giden şehir manzarası.', icon: '🚌', music: 'Yol Şarkıları', img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80', hasBusRight: true },
   { id: 3, time: '09:45 - 12:00', title: 'Nümerik Analiz', desc: 'Günün ilk dersi. MATLAB ve teorik notlar.', icon: '📓', music: 'Akademik Odak', img: './bogazicili.jpg' }, 
-  { id: 4, time: '12:00 - 13:25', title: 'Öğle Arası', desc: 'Yemekhaneye inip pratik bir şeyler alma.', icon: '🍽️', music: 'Mola Zamanı', img: './Yemekhane.jpg' },
+  { id: 4, time: '12:00 - 13:25', title: 'Öğle Arası', desc: 'Yemekhaneye inip pratik bir şeyler alma.', icon: '🍽️', music: 'Mola Zamanı', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80' },
   { id: 5, time: '13:25 - 16:00', title: 'İnternet Programlama', desc: 'Web teknolojileri ve modern kodlama mimarileri üzerine çalışma.', icon: '🌐', music: 'Kodlama Modu', img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80' },
   { id: 6, time: '16:00 - 16:45', title: 'Eve Dönüş', desc: 'Kampüse veda, kulaklığı takıp eve dönüş yoluna koyulma.', icon: '🚶‍♂️', music: 'Yol Müzikleri', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&q=80', hasBusLeft: true },
   { id: 7, time: '17:00 - 19:00', title: 'Dinlenme Molası', desc: 'Günün yorgunluğunu atmak için kahve eşliğinde sakin dinlenme saati.', icon: '🛋️', music: 'Sakinlik', img: './Kahve.jpg', hasCoffeeGame: true },
