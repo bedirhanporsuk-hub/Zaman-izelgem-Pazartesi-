@@ -38,10 +38,10 @@ const cssStyles = `
 `;
 
 const schedule = [
-  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: img: './Kahvaltı.jpg', hasMorningRoutine: true },
+  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: './Kahvaltı.jpg', hasMorningRoutine: true },
   { id: 2, time: '09:00 - 09:45', title: 'Derse Gidiş', desc: 'Kampüse doğru sabah yolculuğu. Cam kenarından akıp giden şehir manzarası.', icon: '🚌', music: 'Yol Şarkıları', img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80', hasBusRight: true },
-  { id: 3, time: '09:45 - 12:00', title: 'Nümerik Analiz', desc: 'Günün ilk dersi. MATLAB ve teorik notlar.', icon: '📓', music: 'Akademik Odak', img: './bogazicili.jpg' }, // Direkt fotoğraf eklendi
-  { id: 4, time: '12:00 - 13:25', title: 'Öğle Arası', desc: 'Yemekhaneye inip pratik bir şeyler alma.', icon: '🍽️', music: 'Mola Zamanı', img: './Yemekhanee.jpg' },
+  { id: 3, time: '09:45 - 12:00', title: 'Nümerik Analiz', desc: 'Günün ilk dersi. MATLAB ve teorik notlar.', icon: '📓', music: 'Akademik Odak', img: './bogazicili.jpg' }, 
+  { id: 4, time: '12:00 - 13:25', title: 'Öğle Arası', desc: 'Yemekhaneye inip pratik bir şeyler alma.', icon: '🍽️', music: 'Mola Zamanı', img: './Yemekhane.jpg' },
   { id: 5, time: '13:25 - 16:00', title: 'İnternet Programlama', desc: 'Web teknolojileri ve modern kodlama mimarileri üzerine çalışma.', icon: '🌐', music: 'Kodlama Modu', img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80' },
   { id: 6, time: '16:00 - 16:45', title: 'Eve Dönüş', desc: 'Kampüse veda, kulaklığı takıp eve dönüş yoluna koyulma.', icon: '🚶‍♂️', music: 'Yol Müzikleri', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&q=80', hasBusLeft: true },
   { id: 7, time: '17:00 - 19:00', title: 'Dinlenme Molası', desc: 'Günün yorgunluğunu atmak için kahve eşliğinde sakin dinlenme saati.', icon: '🛋️', music: 'Sakinlik', img: './Kahve.jpg', hasCoffeeGame: true },
@@ -102,7 +102,7 @@ const BusAnimation = ({ direction }) => (
   </div>
 );
 
-// --- KAHVE SİMÜLATÖRÜ (TEPSİYE GİTMEZ + TARİFLİ) ---
+// --- KAHVE SİMÜLATÖRÜ ---
 const CoffeeGame = () => {
   const [ingredients, setIngredients] = useState([]);
   const [status, setStatus] = useState('idle');
@@ -167,7 +167,7 @@ const CoffeeGame = () => {
   );
 };
 
-// --- MİNİ OYUN 1: DEV SÜRÜKLEMELİ MUTFAK (ESKİ HALİ + KASE EKLENTİSİ) ---
+// --- MİNİ OYUN 1: DEV SÜRÜKLEMELİ MUTFAK ---
 const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey }) => {
   const [showRecipes, setShowRecipes] = useState(false);
   const [stationContents, setStationContents] = useState({ pan: [], pot: [], oven: [], juicer: [], bowl: [] });
@@ -221,25 +221,16 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
     { n: 'Mevsim Salata', s: 'bowl', i: '🥗', req: ['marul', 'domates', 'zeytinyagi'], salt: true, slot: 'salad', win: 'Taptaze, zeytinyağlı enfes bir mevsim salatası!', nosalt: 'Salata çok taze ama tuzu eksik.' }
   ];
 
-  const handleWashDrop = (e, targetZone) => {
-  e.preventDefault(); 
-  const dishId = e.dataTransfer.getData('text/plain');
-  const dish = dishes.find(d => d.id === dishId);
-  if (!dish) return;
-
-  if (targetZone === 'tap') {
-    // Sadece kirliyse yıkanabilir
-    if (dish.state === 'dirty') {
-      playAudio('step');
-      setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'rinsed' } : d));
-    }
-  } else if (targetZone === 'machine') {
-    // Sadece sudan geçirilmişse (rinsed) makineye girebilir
-    if (dish.state === 'rinsed') {
-      playAudio('coin');
-      setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'loaded' } : d));
-    } else if (dish.state === 'dirty') {
-      alert("Önce muslukta sudan geçirmelisin, makine kirlenmesin!");
+  const handleDrop = (e, stKey) => {
+    e.preventDefault(); const ingId = e.dataTransfer.getData('text/plain');
+    const item = ingList.find(i => i.id === ingId);
+    if (!item || cookingState !== 'idle') return;
+    setStationContents(prev => {
+      const list = prev[stKey];
+      if (list.some(x => x.id === item.id) || list.length >= 5) return prev;
+      playAudio('coin'); return { ...prev, [stKey]: [...list, item] };
+    });
+  };
 
   const removeFromStation = (stKey, ingId) => {
     if (cookingState !== 'idle') return; playAudio('step');
@@ -447,21 +438,22 @@ const DinnerGame = ({ globalTray, isEaten, setIsEaten, washResetKey }) => {
   const handleEat = () => { playAudio('win'); setIsEaten(true); };
 
   const handleWashDrop = (e, targetZone) => {
-  e.preventDefault();
-  const dishId = e.dataTransfer.getData('text/plain');
-  const dish = dishes.find(d => d.id === dishId);
-  if (!dish) return;
+    e.preventDefault();
+    const dishId = e.dataTransfer.getData('text/plain');
+    const dish = dishes.find(d => d.id === dishId);
+    if (!dish) return;
 
-  // 1. Musluk Mantığı
-  if (targetZone === 'tap' && dish.state === 'dirty') {
-    playAudio('step');
-    setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'rinsed' } : d));
-  } 
-  // 2. Makine Mantığı
-  else if (targetZone === 'machine' && dish.state === 'rinsed') {
-    playAudio('coin');
-    setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'loaded' } : d));
-  }
+    if (targetZone === 'tap' && dish.state === 'dirty') {
+      playAudio('step');
+      setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'rinsed' } : d));
+    } 
+    else if (targetZone === 'machine' && dish.state === 'rinsed') {
+      playAudio('coin');
+      setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'loaded' } : d));
+    } else if (targetZone === 'machine' && dish.state === 'dirty') {
+      alert("Önce muslukta sudan geçirmelisin!");
+    }
+  };
 
   const startMachine = () => { playAudio('heal'); setMachineStatus('running'); setTimeout(() => { playAudio('win'); setMachineStatus('done'); }, 4000); };
   const allLoaded = dishes.every(d => d.state === 'loaded');
@@ -496,7 +488,7 @@ const DinnerGame = ({ globalTray, isEaten, setIsEaten, washResetKey }) => {
             {dishes.filter(d => d.state !== 'loaded').length === 0 && <div style={{ color: '#2ecc71', fontSize: '0.9rem', alignSelf: 'center' }}>Bulaşık kalmadı!</div>}
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <div className="wash-station" onDragOver={e=>e.preventDefault()} onDrop={e=>handleWashDrop(e, 'tap zone')} style={{ flex: 1, borderColor: '#3498db' }}>🚰</div>
+            <div className="wash-station" onDragOver={e=>e.preventDefault()} onDrop={e=>handleWashDrop(e, 'tap')} style={{ flex: 1, borderColor: '#3498db' }}>🚰</div>
             <div className="wash-station" onDragOver={e=>e.preventDefault()} onDrop={e=>handleWashDrop(e, 'machine')} style={{ flex: 1, borderColor: '#95a5a6', position: 'relative' }}>🧼</div>
           </div>
           {allLoaded && <button onClick={startMachine} className="rpg-btn" style={{ width: '100%', marginTop: '15px', background: '#2980b9', padding: '10px' }}>⚡ MAKİNEYİ ÇALIŞTIR</button>}
@@ -508,7 +500,7 @@ const DinnerGame = ({ globalTray, isEaten, setIsEaten, washResetKey }) => {
   );
 };
 
-// --- RPG ZİNDAN + SANDIK YÜZDELİKLERİ (ESKİ HALİYLE) ---
+// --- RPG ZİNDAN + SANDIK YÜZDELİKLERİ ---
 const GameCenter = () => {
   const [tab, setTab] = useState('battle');
   const initP = { hp: 100, maxHp: 100, atk: 16, def: 5, lvl: 1, xp: 0, maxXp: 40, gold: 80, pot: 2, pts: 3, s: 0, v: 0, d: 0 };
