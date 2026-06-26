@@ -221,16 +221,25 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
     { n: 'Mevsim Salata', s: 'bowl', i: '🥗', req: ['marul', 'domates', 'zeytinyagi'], salt: true, slot: 'salad', win: 'Taptaze, zeytinyağlı enfes bir mevsim salatası!', nosalt: 'Salata çok taze ama tuzu eksik.' }
   ];
 
-  const handleDrop = (e, stKey) => {
-    e.preventDefault(); const ingId = e.dataTransfer.getData('text/plain');
-    const item = ingList.find(i => i.id === ingId);
-    if (!item || cookingState !== 'idle') return;
-    setStationContents(prev => {
-      const list = prev[stKey];
-      if (list.some(x => x.id === item.id) || list.length >= 5) return prev;
-      playAudio('coin'); return { ...prev, [stKey]: [...list, item] };
-    });
-  };
+  const handleWashDrop = (e, targetZone) => {
+  e.preventDefault(); 
+  const dishId = e.dataTransfer.getData('text/plain');
+  const dish = dishes.find(d => d.id === dishId);
+  if (!dish) return;
+
+  if (targetZone === 'tap') {
+    // Sadece kirliyse yıkanabilir
+    if (dish.state === 'dirty') {
+      playAudio('step');
+      setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'rinsed' } : d));
+    }
+  } else if (targetZone === 'machine') {
+    // Sadece sudan geçirilmişse (rinsed) makineye girebilir
+    if (dish.state === 'rinsed') {
+      playAudio('coin');
+      setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'loaded' } : d));
+    } else if (dish.state === 'dirty') {
+      alert("Önce muslukta sudan geçirmelisin, makine kirlenmesin!");
 
   const removeFromStation = (stKey, ingId) => {
     if (cookingState !== 'idle') return; playAudio('step');
