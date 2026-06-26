@@ -112,7 +112,7 @@ const CoffeeGame = () => {
   const recipes = [
     { n: 'Filtre Kahve', req: ['kahve', 'su'], icon: '☕', desc: 'Ayıltıcı sade kahve.' },
     { n: 'Latte', req: ['kahve', 'sut'], icon: '☕', desc: 'Sıcak bir Latte.' },
-	{ n: 'Filtre Kahve', req: ['kahve', 'su','sut'], icon: '☕', desc: 'Ayıltıcı sade kahve.' }
+	{ n: 'Filtre Kahve', req: ['kahve', 'su','sut'], icon: '☕', desc: 'Ayıltıcı sade kahve.' },
     { n: 'Buzlu Soğuk Kahve', req: ['kahve', 'sut', 'buz'], icon: '🥤', desc: 'Ferahlatıcı yaz kahvesi.' },
 	{ n: 'Soğuk Americano', req: ['kahve', 'su', 'buz'], icon: '🥤', desc: 'Ayıltıcı soğuk Americano.' },
 	{ n: 'Soğuk Americano', req: ['kahve', 'su', 'buz','sut'], icon: '🥤', desc: 'Ayıltıcı sade kahve.' },
