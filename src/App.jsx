@@ -6,9 +6,9 @@ const cssStyles = `
   @keyframes firefly { 0% { opacity: 0; transform: translateY(0) scale(1); } 50% { opacity: 1; transform: translateY(-20px) scale(1.2); } 100% { opacity: 0; transform: translateY(-40px) scale(1); } }
   @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
   @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
+  @keyframes jumpOver { 0% { transform: translate(-90px, 0) rotate(-15deg); opacity: 0; } 20% { opacity: 1; } 50% { transform: translate(0, -65px) rotate(0deg); opacity: 1; } 80% { opacity: 1; } 100% { transform: translate(90px, 0) rotate(15deg); opacity: 0; } }
   @keyframes pulse { 0% { transform: scale(1); filter: drop-shadow(0 0 30px #f1c40f); } 50% { transform: scale(1.1); filter: drop-shadow(0 0 50px #f39c12); } 100% { transform: scale(1); filter: drop-shadow(0 0 30px #f1c40f); } }
   
-  /* Otobüs Animasyonları */
   @keyframes busMoveRight { 0% { transform: translateX(-150%); } 100% { transform: translateX(150%); } }
   @keyframes busMoveLeft { 0% { transform: translateX(150%); } 100% { transform: translateX(-150%); } }
   @keyframes carMoveRight { 0% { transform: translateX(-200%); } 100% { transform: translateX(200%); } }
@@ -29,6 +29,7 @@ const cssStyles = `
   .cook-station.drag-over { background: #34495e; border-color: #f1c40f; }
   .comment-input { width: 70%; padding: 6px; border-radius: 4px; border: 1px solid #555; background: #222; color: #fff; font-size: 0.8rem; }
   .tray-slot { background: #111; border: 2px inset #555; border-radius: 8px; padding: 8px; min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .sheep-animate { animation: jumpOver 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; font-size: 1.8rem; position: absolute; }
   .welcome-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,10,10,0.96); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; backdrop-filter: blur(8px); }
   .bg-layer { position: fixed; inset: 0; z-index: -5; transition: opacity 1.5s ease-in-out; }
   .dish-item { font-size: 1.8rem; padding: 8px; background: rgba(0,0,0,0.4); border: 2px solid #555; border-radius: 50%; cursor: grab; display: inline-block; margin: 0 5px; }
@@ -37,19 +38,19 @@ const cssStyles = `
 `;
 
 const schedule = [
-  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Güne enerjik bir başlangıç yapmak için temel sabah rutini.', icon: '🌅', music: 'Sabah Kahvesi & Akustik', img: 'https://images.unsplash.com/photo-1506844902170-5c37eb452626?w=400&q=80', hasMorningRoutine: true },
-  { id: 2, time: '09:00 - 09:45', title: 'Derse Gidiş', desc: 'Otobüsle kampüse yolculuk, cam kenarında sabah düşünceleri ve günün planı.', icon: '🚌', music: 'Yol Şarkıları', img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80', hasBusRight: true },
-  { id: 3, time: '09:45 - 12:00', title: 'Nümerik Analiz', desc: 'MATLAB kodları ve formüllerle dolu yoğun bir ders bloğu.', icon: '📓', music: 'Lo-Fi Beats to Study', img: 'https://images.unsplash.com/photo-1517842645767-c639042777db?w=400&q=80', hasNumericNote: true },
-  { id: 4, time: '12:00 - 13:25', title: 'Öğle Arası', desc: 'Yemekhanede arkadaşlarla sohbet ve öğle yemeği arası.', icon: '🍽️', music: 'Türkçe Alternatif Rock', img: '/Yemekhane.jpg' },
-  { id: 5, time: '13:25 - 16:00', title: 'İnternet Programlama', desc: 'Modern web mimarileri, React komponentleri ve backend entegrasyonları.', icon: '🌐', music: 'Cyberpunk Coding', img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80' },
-  { id: 6, time: '16:00 - 16:45', title: 'Eve Dönüş', desc: 'Günün yorgunluğuyla eve dönüş yolu, kulaklıkta favori müzik.', icon: '🚶‍♂️', music: 'Akşam Üstü Melankolisi', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&q=80', hasBusLeft: true },
-  { id: 7, time: '17:00 - 19:00', title: 'Dinlenme Molası', desc: 'Günün yorgunluğunu atmak için kahve eşliğinde sakin bir dinlenme.', icon: '🛋️', music: 'Jazz Vibes', img: '/Kahve.jpg', hasCoffeeGame: true },
-  { id: 8, time: '19:00 - 20:00', title: 'Mutfak Mesaisi', desc: 'Akşam yemeği için hazırlık zamanı. Pratik ve doyurucu öğrenci tarifleri.', icon: '🍳', music: 'Cooking & Chilling', img: 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=400&q=80', hasKitchenGame: true },
-  { id: 9, time: '20:00 - 20:30', title: 'Akşam Yemeği & Temizlik', desc: 'Hazırlanan yemeğin tadını çıkarma ve ardından mutfağı toparlama.', icon: '🧽', music: 'Akşam Yemeği Akustiği', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80', hasDinnerGame: true },
-  { id: 10, time: '20:30 - 22:00', title: 'Günün Tekrarı', desc: 'İşlenen derslerin üzerinden geçme ve ödevleri tamamlama saati.', icon: '📚', music: 'Deep Focus', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&q=80' },
-  { id: 11, time: '22:00 - 00:00', title: 'Oyun & Kafa Dağıtma', desc: 'Zorlu bir günün ardından oyun dünyasında stres atma zamanı.', icon: '🎮', music: 'Epic Gaming Soundtracks', img: '/RE2R.jpg', hasMiniGame: true },
-  { id: 12, time: '00:00 - 02:30', title: 'Gece Sineması', desc: 'Günün kapanışını favori dizilerle yapma saati.', icon: '🍿', music: 'Cinematic Soundscapes', img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400&q=80', hasShowsCarousel: true },
-  { id: 13, time: '02:30 - 08:00', title: 'Derin Uyku', desc: 'Yeni bir güne enerji toplamak için dinlenme.', icon: '💤', music: 'Deep Sleep & Rain', img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80', hasSleepSection: true }
+  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: 'https://images.unsplash.com/photo-1506844902170-5c37eb452626?w=400&q=80', hasMorningRoutine: true },
+  { id: 2, time: '09:00 - 09:45', title: 'Derse Gidiş', desc: 'Kampüse doğru sabah yolculuğu. Cam kenarından akıp giden şehir manzarası.', icon: '🚌', music: 'Yol Şarkıları', img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80', hasBusRight: true },
+  { id: 3, time: '09:45 - 12:00', title: 'Nümerik Analiz', desc: 'Günün ilk dersi. MATLAB ve teorik notlar.', icon: '📓', music: 'Akademik Odak', img: './bogazicili.jpg' }, // Direkt fotoğraf eklendi
+  { id: 4, time: '12:00 - 13:25', title: 'Öğle Arası', desc: 'Yemekhaneye inip pratik bir şeyler alma.', icon: '🍽️', music: 'Mola Zamanı', img: './Yemekhane.jpg' },
+  { id: 5, time: '13:25 - 16:00', title: 'İnternet Programlama', desc: 'Web teknolojileri ve modern kodlama mimarileri üzerine çalışma.', icon: '🌐', music: 'Kodlama Modu', img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80' },
+  { id: 6, time: '16:00 - 16:45', title: 'Eve Dönüş', desc: 'Kampüse veda, kulaklığı takıp eve dönüş yoluna koyulma.', icon: '🚶‍♂️', music: 'Yol Müzikleri', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&q=80', hasBusLeft: true },
+  { id: 7, time: '17:00 - 19:00', title: 'Dinlenme Molası', desc: 'Günün yorgunluğunu atmak için kahve eşliğinde sakin dinlenme saati.', icon: '🛋️', music: 'Sakinlik', img: './Kahve.jpg', hasCoffeeGame: true },
+  { id: 8, time: '19:00 - 20:00', title: 'Mutfak Mesaisi', desc: 'Yemekleri yap ve Tepsiye diz. Yeme işlemi bir sonraki saatte!', icon: '🍳', music: 'Yemek Arka Planı', img: 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=400&q=80', hasKitchenGame: true },
+  { id: 9, time: '20:00 - 20:30', title: 'Akşam Yemeği & Temizlik', desc: 'Mutfakta hazırladığın tepsiyi burada yiyip bulaşıkları yıkayabilirsin.', icon: '🧽', music: 'Akşam Jazı', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&q=80', hasDinnerGame: true },
+  { id: 10, time: '20:30 - 22:00', title: 'Günün Tekrarı', desc: 'Okulda işlenen konuların verimli bir tekrarı.', icon: '📚', music: 'Odaklanma', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&q=80' },
+  { id: 11, time: '22:00 - 00:00', title: 'Oyun & Kafa Dağıtma', desc: '15 Bölümlük Zindan! Öldüğünde sadece 1 dirilme hakkın var.', icon: '🎮', music: 'Game OST', img: './RE2R.jpg', hasMiniGame: true },
+  { id: 12, time: '00:00 - 02:30', title: 'Gece Sineması', desc: 'Favori yapımlar ve kalıcı yorum sistemi:', icon: '🍿', music: 'Gece Modu', img: './Vikings.jpg', hasShowsCarousel: true },
+  { id: 13, time: '02:30 - 08:00', title: 'Derin Uyku & Rüyalar', desc: 'Çitten atlayan kuzular ve rüya simülatörü.', icon: '💤', music: 'Gece Sessizliği', img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80', hasSleepSection: true }
 ];
 
 // --- SES MOTORU ---
@@ -65,7 +66,7 @@ const playAudio = (type) => {
   else if (type === 'lose') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.linearRampToValueAtTime(40, now + 0.5); gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0.001, now + 0.5); osc.start(now); osc.stop(now + 0.5); }
 };
 
-// --- YENİ EKLENTİ: SABAH RUTİNİ ---
+// --- SABAH RUTİNİ ---
 const MorningRoutine = () => {
   const steps = ['Yataktan Kalk', 'Yatağı Topla', 'Yüzünü Yıka', 'Kahvaltı Yap', 'Masayı Topla', 'Dişlerini Fırçala', 'Hazırlan', 'Evden Çık'];
   const [step, setStep] = useState(0);
@@ -75,124 +76,98 @@ const MorningRoutine = () => {
       <h3 style={{color:'#f1c40f', margin:'0 0 10px 0'}}>🌅 Sabah Rutini Görevleri</h3>
       {step < steps.length ? (
         <>
-          <div style={{fontSize:'1.2rem', marginBottom:'10px', color:'#ccc'}}>Adım {step+1}/{steps.length}: <br/><span style={{color:'#3498db', fontWeight:'bold', fontSize:'1.4rem'}}>{steps[step]}</span></div>
-          <button onClick={advance} className="rpg-btn" style={{background:'#27ae60', padding:'10px 20px', fontSize:'1rem'}}>Tamamla ✔️</button>
+          <div style={{fontSize:'1.1rem', marginBottom:'10px', color:'#ccc'}}>Adım {step+1}/{steps.length}: <br/><span style={{color:'#3498db', fontWeight:'bold', fontSize:'1.3rem'}}>{steps[step]}</span></div>
+          <button onClick={advance} className="rpg-btn" style={{background:'#27ae60'}}>Tamamla ✔️</button>
         </>
-      ) : (
-        <div style={{color:'#2ecc71', fontSize:'1.2rem', fontWeight:'bold', animation:'bounce 1s infinite'}}>✨ Harika! Güne hazırsın.</div>
-      )}
+      ) : <div style={{color:'#2ecc71', fontWeight:'bold'}}>✨ Harika! Evden çıkmaya hazırsın.</div>}
     </div>
   );
 };
 
-// --- YENİ EKLENTİ: OTOBÜS ANİMASYONLARI ---
-const BusAnimation = ({ direction }) => {
-  return (
-    <div style={{ position: 'relative', width: '100%', height: '100px', background: '#333', overflow: 'hidden', borderRadius: '12px', marginTop: '15px', borderBottom: '4px solid #f1c40f' }}>
-      <div style={{ position: 'absolute', top: '50%', left: 0, width: '100%', borderTop: '2px dashed #fff', zIndex: 1 }}></div>
-      {direction === 'right' ? (
-        <>
-          <div style={{ animation: 'busMoveRight 8s linear infinite', fontSize: '3.5rem', position: 'absolute', top: '5px', zIndex: 5 }}>🚌</div>
-          <div style={{ animation: 'carMoveRight 6s linear infinite', fontSize: '2rem', position: 'absolute', bottom: '10px', zIndex: 4, left: '-50px' }}>🚗</div>
-          <div style={{ animation: 'carMoveLeft 5s linear infinite', fontSize: '2.5rem', position: 'absolute', top: '10px', zIndex: 3, right: '-50px', transform: 'scaleX(-1)' }}>🚕</div>
-        </>
-      ) : (
-        <>
-          <div style={{ animation: 'busMoveLeft 8s linear infinite', fontSize: '3.5rem', position: 'absolute', top: '5px', zIndex: 5, transform: 'scaleX(-1)' }}>🚌</div>
-          <div style={{ animation: 'carMoveLeft 6s linear infinite', fontSize: '2rem', position: 'absolute', bottom: '10px', zIndex: 4, right: '-50px', transform: 'scaleX(-1)' }}>🚙</div>
-          <div style={{ animation: 'carMoveRight 5s linear infinite', fontSize: '2.5rem', position: 'absolute', top: '10px', zIndex: 3, left: '-50px' }}>🚕</div>
-        </>
-      )}
-    </div>
-  );
-};
+// --- OTOBÜS ANİMASYONLARI ---
+const BusAnimation = ({ direction }) => (
+  <div style={{ position: 'relative', width: '100%', height: '90px', background: '#333', overflow: 'hidden', borderRadius: '12px', marginTop: '15px', borderBottom: '4px solid #f1c40f' }}>
+    <div style={{ position: 'absolute', top: '50%', left: 0, width: '100%', borderTop: '2px dashed #fff', zIndex: 1 }}></div>
+    {direction === 'right' ? (
+      <>
+        <div style={{ animation: 'busMoveRight 8s linear infinite', fontSize: '3rem', position: 'absolute', top: '5px', zIndex: 5 }}>🚌</div>
+        <div style={{ animation: 'carMoveRight 6s linear infinite', fontSize: '1.8rem', position: 'absolute', bottom: '10px', zIndex: 4, left: '-50px' }}>🚗</div>
+      </>
+    ) : (
+      <>
+        <div style={{ animation: 'busMoveLeft 8s linear infinite', fontSize: '3rem', position: 'absolute', top: '5px', zIndex: 5, transform: 'scaleX(-1)' }}>🚌</div>
+        <div style={{ animation: 'carMoveLeft 6s linear infinite', fontSize: '1.8rem', position: 'absolute', bottom: '10px', zIndex: 4, right: '-50px', transform: 'scaleX(-1)' }}>🚙</div>
+      </>
+    )}
+  </div>
+);
 
-// --- YENİ EKLENTİ: KAHVE SİMÜLATÖRÜ ---
-const CoffeeGame = ({ setGlobalTray, setIsEaten, setWashResetKey }) => {
+// --- KAHVE SİMÜLATÖRÜ (TEPSİYE GİTMEZ + TARİFLİ) ---
+const CoffeeGame = () => {
   const [ingredients, setIngredients] = useState([]);
-  const [status, setStatus] = useState('idle'); // idle, brewing, done
+  const [status, setStatus] = useState('idle');
+  const [showRecipes, setShowRecipes] = useState(false);
+  const [myCup, setMyCup] = useState(null);
 
   const recipes = [
-    { n: 'Filtre Kahve', req: ['kahve', 'su'], icon: '☕' },
-    { n: 'Sütlü Latte', req: ['kahve', 'sut'], icon: '☕' },
-    { n: 'Buzlu Soğuk Kahve', req: ['kahve', 'sut', 'buz'], icon: '🥤' }
+    { n: 'Filtre Kahve', req: ['kahve', 'su'], icon: '☕', desc: 'Ayıltıcı sade kahve.' },
+    { n: 'Sütlü Latte', req: ['kahve', 'sut'], icon: '☕', desc: 'Yumuşak içim espresso.' },
+    { n: 'Buzlu Soğuk Kahve', req: ['kahve', 'sut', 'buz'], icon: '🥤', desc: 'Ferahlatıcı yaz kahvesi.' }
   ];
 
-  const addIng = (ing) => {
-    if(status === 'idle' && ingredients.length < 3) {
-      playAudio('coin'); setIngredients([...ingredients, ing]);
-    }
-  };
+  const addIng = (ing) => { if(status === 'idle' && ingredients.length < 3) { playAudio('coin'); setIngredients([...ingredients, ing]); } };
 
   const brew = () => {
     setStatus('brewing'); playAudio('heal');
     setTimeout(() => {
       const sorted = [...ingredients].sort().join(',');
       const found = recipes.find(r => r.req.sort().join(',') === sorted);
-      if(found) {
-        setGlobalTray(p => ({...p, drink: { title: found.n, desc: 'Taptaze demlendi.', icon: found.icon, color: '#8e44ad', slot: 'drink' }}));
-        playAudio('win');
-      } else {
-        setGlobalTray(p => ({...p, drink: { title: 'Tuhaf Karışım', desc: 'İçilmez ama uyku açar.', icon: '🧪', color: '#c0392b', slot: 'drink' }}));
-        playAudio('lose');
-      }
-      setIsEaten(false); setWashResetKey(k => k + 1);
+      if(found) { setMyCup(found); playAudio('win'); } else { setMyCup({ n: 'Tuhaf Karışım', desc: 'Acı bir tat bıraktı.', icon: '🧪' }); playAudio('lose'); }
       setStatus('done');
-    }, 5000);
+    }, 4000);
   };
 
   return (
-    <div className="rpg-box" style={{padding:'15px', marginTop:'10px', textAlign:'center'}}>
-      <h3 style={{color:'#f39c12', margin:'0 0 10px 0'}}>☕ Barista Köşesi (5 Saniye)</h3>
+    <div className="rpg-box" style={{padding:'12px', marginTop:'10px', textAlign:'center'}}>
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'8px'}}>
+        <span style={{color:'#f39c12', fontWeight:'bold', fontSize:'0.8rem'}}>☕ KAHVE KÖŞESİ (5 sn)</span>
+        <button onClick={()=>setShowRecipes(!showRecipes)} className="rpg-btn" style={{background:'#2980b9'}}>📖 Tarifler</button>
+      </div>
+
+      {showRecipes && (
+        <div style={{background:'#000', padding:'6px', borderRadius:'6px', marginBottom:'8px', fontSize:'0.65rem', textAlign:'left', border:'1px solid #444'}}>
+          {recipes.map((r,i) => <div key={i} style={{color:'#ccc'}}>{r.icon} <b>{r.n}:</b> {r.req.join(', ')}</div>)}
+        </div>
+      )}
+
       {status === 'idle' && (
         <>
-          <div style={{display:'flex', gap:'5px', justifyContent:'center', marginBottom:'10px'}}>
+          <div style={{display:'flex', gap:'4px', justifyContent:'center', marginBottom:'8px'}}>
             <button onClick={()=>addIng('kahve')} className="rpg-btn" style={{background:'#5a3a22'}}>🫘 Kahve</button>
             <button onClick={()=>addIng('su')} className="rpg-btn" style={{background:'#3498db'}}>💧 Su</button>
             <button onClick={()=>addIng('sut')} className="rpg-btn" style={{background:'#ecf0f1', color:'#000'}}>🥛 Süt</button>
             <button onClick={()=>addIng('buz')} className="rpg-btn" style={{background:'#74b9ff'}}>🧊 Buz</button>
           </div>
-          <div style={{minHeight:'40px', background:'#111', borderRadius:'8px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.5rem', marginBottom:'10px'}}>
-            {ingredients.length === 0 ? <span style={{fontSize:'0.8rem', color:'#555'}}>Malzeme ekle...</span> : ingredients.map((i, idx) => <span key={idx}>{i==='kahve'?'🫘':i==='su'?'💧':i==='sut'?'🥛':'🧊'}</span>)}
+          <div style={{minHeight:'35px', background:'#111', borderRadius:'6px', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.3rem', marginBottom:'8px'}}>
+            {ingredients.length === 0 ? <span style={{fontSize:'0.7rem', color:'#555'}}>Malzeme seç...</span> : ingredients.map((i, idx) => <span key={idx}>{i==='kahve'?'🫘':i==='su'?'💧':i==='sut'?'🥛':'🧊'}</span>)}
           </div>
           <button onClick={brew} disabled={ingredients.length === 0} className="rpg-btn" style={{width:'100%', background:'#27ae60'}}>⚡ DEMLE</button>
         </>
       )}
-      {status === 'brewing' && (
-        <div style={{padding:'20px 0'}}>
-          <div style={{fontSize:'3rem', animation:'bounce 0.5s infinite'}}>☕</div>
-          <div style={{color:'#3498db', marginTop:'10px'}}>Kahve Hazırlanıyor...</div>
-        </div>
-      )}
-      {status === 'done' && (
-        <div>
-          <div style={{fontSize:'2.5rem', marginBottom:'10px'}}>✨</div>
-          <div style={{color:'#2ecc71', fontWeight:'bold'}}>İçeceğin hazırlandı ve Tepsiye gönderildi!</div>
-          <button onClick={() => {setStatus('idle'); setIngredients([]);}} className="rpg-btn" style={{marginTop:'10px', background:'#2980b9'}}>Yeniden Yap</button>
+      {status === 'brewing' && <div style={{padding:'10px 0'}}><div style={{fontSize:'2.5rem', animation:'bounce 0.5s infinite'}}>☕</div><div style={{color:'#3498db', fontSize:'0.8rem'}}>Demleniyor...</div></div>}
+      {status === 'done' && myCup && (
+        <div style={{padding:'5px 0'}}>
+          <div style={{fontSize:'2.5rem'}}>{myCup.icon}</div>
+          <h4 style={{color:'#2ecc71', margin:'3px 0'}}>{myCup.n}</h4>
+          <p style={{fontSize:'0.75rem', color:'#aaa', margin:'0 0 8px 0'}}>{myCup.desc}</p>
+          <button onClick={() => {setStatus('idle'); setIngredients([]); setMyCup(null);}} className="rpg-btn" style={{background:'#2980b9'}}>Tazele</button>
         </div>
       )}
     </div>
   );
 };
 
-// --- NÜMERİK ANALİZ NOTU (BOGAZICILI) ---
-const NumericNote = () => {
-  const [show, setShow] = useState(false);
-  return (
-    <div style={{ marginTop: '15px' }}>
-      <button onClick={() => setShow(!show)} className="rpg-btn" style={{ background: '#2980b9', padding: '6px 12px', fontSize: '0.9rem' }}>
-        {show ? 'Kapat' : '📝 Küçük Notu Gör'}
-      </button>
-      {show && (
-        <div style={{ marginTop: '15px', animation: 'bounce 0.5s' }}>
-          <img src="/bogazicili.jpg" alt="Nümerik Notu" style={{ width: '100%', borderRadius: '12px', border: '3px solid #f1c40f', boxShadow: '0 5px 20px rgba(0,0,0,0.5)' }} />
-        </div>
-      )}
-    </div>
-  );
-};
-
-// --- MİNİ OYUN 1: DEV SÜRÜKLEMELİ MUTFAK ---
+// --- MİNİ OYUN 1: DEV SÜRÜKLEMELİ MUTFAK (ESKİ HALİ + KASE EKLENTİSİ) ---
 const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey }) => {
   const [showRecipes, setShowRecipes] = useState(false);
   const [stationContents, setStationContents] = useState({ pan: [], pot: [], oven: [], juicer: [], bowl: [] });
@@ -224,16 +199,30 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
     { n: 'Kasap Köfte', s: 'pan', i: '🥩', req: ['kiyma', 'sogan'], salt: true, slot: 'main', win: 'Mangal lezzetini aratmayan harika bir köfte!', nosalt: 'Köfte güzel kızardı fakat tuzu eksik.' },
     { n: 'Sahanda Omlet', s: 'pan', i: '🍳', req: ['yumurta', 'peynir'], salt: true, slot: 'main', win: 'Peyniri kararında erimiş nefis omlet.', nosalt: 'Omlet pofuduk oldu ancak tuz eksik.' },
     { n: 'Öğrenci Menemeni', s: 'pan', i: '🥘', req: ['yumurta', 'domates', 'biber'], salt: true, slot: 'main', win: 'Pratik ve doyurucu klasiktir.', nosalt: 'Kıvamı harika fakat tuzu eksik.' },
+    { n: 'Sucuklu Yumurta', s: 'pan', i: '🍳', req: ['sucuk', 'yumurta'], salt: true, slot: 'main', win: 'Sucuğun baharatı yumurtayla kusursuz birleşti.', nosalt: 'Sucuklar pişti fakat tuz eklenmemiş.' },
+    { n: 'Tavuk Sote', s: 'pan', i: '🍗', req: ['tavuk', 'biber', 'domates'], salt: true, slot: 'main', win: 'Lokanta usulü sulu tavuk sote.', nosalt: 'Tavuk iyi pişti ancak tuzu yetersiz.' },
+    { n: 'Patates Kızartması', s: 'pan', i: '🍟', req: ['patates', 'zeytinyagi'], salt: true, slot: 'salad', win: 'Çıtır çıtır altın sarısı kızartma!', nosalt: 'Patatesler güzel kızardı fakat tuzu eksik.' },
+    { n: 'Balıkesir Burger', s: 'pan', i: '🍔', req: ['kiyma', 'domates', 'peynir', 'marul'], salt: true, slot: 'main', win: 'Gurme işi Balıkesir Burger!', nosalt: 'Burger harika pişti fakat tuzu az kalmış.' },
+    { n: 'Kaşarlı Tost', s: 'pan', i: '🥪', req: ['ekmek', 'peynir', 'tereyagi'], salt: false, slot: 'salad', win: 'Dışı çıtır, içi sünen nefis tost.' },
     { n: 'Sade Makarna', s: 'pot', i: '🍝', req: ['makarna', 'su'], salt: true, slot: 'main', win: 'Hızlı ve pratik bir kurtarıcı.', nosalt: 'Makarna pişti fakat tuzsuz olduğu için yavan.' },
+    { n: 'Salçalı Makarna', s: 'pot', i: '🍝', req: ['makarna', 'su', 'salca'], salt: true, slot: 'main', win: 'Salçası kavrulmuş çocukluk klasiği.', nosalt: 'Salça güzel renk verdi fakat su tuzsuz.' },
     { n: 'Mercimek Çorbası', s: 'pot', i: '🥣', req: ['mercimek', 'su', 'sogan'], salt: true, slot: 'soup', win: 'Tam lokanta usulü sapsarı şifa çorbası.', nosalt: 'Kıvamı iyi fakat tuzu az olduğu için hafif kalmış.' },
+    { n: 'Domates Çorbası', s: 'pot', i: '🥣', req: ['domates', 'su', 'un'], salt: true, slot: 'soup', win: 'Kıvamı pürüzsüz harika domates çorbası.', nosalt: 'Rengi iyi fakat tuzu eksik.' },
+    { n: 'Şehriyeli Pilav', s: 'pot', i: '🍚', req: ['pirinc', 'tereyagi', 'su'], salt: true, slot: 'main', win: 'Tane tane dökülen pilav!', nosalt: 'Pilav pişti ancak tuz eklemeyi unuttun.' },
+    { n: 'Geleneksel Kuru Fasulye', s: 'pot', i: '🧆', req: ['fasulye', 'salca', 'sogan', 'su'], salt: true, slot: 'main', win: 'Helme dökmüş geleneksel kuru fasulye yemeği.', nosalt: 'Fasulyeler lokum gibi fakat tuzu yetersiz.' },
+    { n: 'Haşlanmış Yumurta', s: 'pot', i: '🥚', req: ['yumurta', 'su'], salt: false, slot: 'salad', win: 'Kararında haşlanmış sporcu öğünü.' },
+    { n: 'Fırın Sütlaç', s: 'oven', i: '🍮', req: ['sut', 'pirinc', 'seker'], salt: false, slot: 'salad', win: 'Üzeri kızarmış fırın sütlaç.' },
     { n: 'Karışık Pizza', s: 'oven', i: '🍕', req: ['un', 'domates', 'peynir', 'sucuk'], salt: true, slot: 'main', win: 'Harika bir gece kaçamağı pizzası!', nosalt: 'Malzemeler pişti fakat hamurun tuzu eksik.' },
-    { n: 'Mevsim Salata', s: 'bowl', i: '🥗', req: ['marul', 'domates', 'zeytinyagi'], salt: true, slot: 'salad', win: 'Taptaze, zeytinyağlı enfes bir mevsim salatası!', nosalt: 'Salata çok taze ama tuzu eksik.' },
-    { n: 'Çoban Salata', s: 'bowl', i: '🥗', req: ['domates', 'sogan', 'biber', 'zeytinyagi'], salt: true, slot: 'salad', win: 'İnce doğranmış ferah bir çoban salata!', nosalt: 'Taze ama tuzu unutulmuş.' }
+    { n: 'Anne Keki', s: 'oven', i: '🧁', req: ['un', 'yumurta', 'seker', 'sut'], salt: false, slot: 'salad', win: 'Anne elinden çıkmış gibi kabarmış sıcacık kek.' },
+    { n: 'Fırında Soslu Tavuk', s: 'oven', i: '🍗', req: ['tavuk', 'patates', 'salca'], salt: true, slot: 'main', win: 'Sosu patateslere işlemiş fırın tavuk yemeği.', nosalt: 'Tavuk kızardı fakat tuzu az kalmış.' },
+    { n: 'Atom Meyve Suyu', s: 'juicer', i: '🥤', req: ['portakal', 'elma', 'limon'], salt: false, slot: 'drink', win: 'Üç meyvenin kusursuz karışımı, C vitamini atomu!' },
+    { n: 'Taze Çilek Suyu', s: 'juicer', i: '🍓', req: ['cilek', 'seker'], salt: false, slot: 'drink', win: 'Tatlı ve serinletici çilek nektarı.' },
+    { n: 'Ev Yapımı Limonata', s: 'juicer', i: '🍋', req: ['limon', 'su', 'seker'], salt: false, slot: 'drink', win: 'Buz gibi ev yapımı hakiki limonata.' },
+    { n: 'Mevsim Salata', s: 'bowl', i: '🥗', req: ['marul', 'domates', 'zeytinyagi'], salt: true, slot: 'salad', win: 'Taptaze, zeytinyağlı enfes bir mevsim salatası!', nosalt: 'Salata çok taze ama tuzu eksik.' }
   ];
 
   const handleDrop = (e, stKey) => {
-    e.preventDefault();
-    const ingId = e.dataTransfer.getData('text/plain');
+    e.preventDefault(); const ingId = e.dataTransfer.getData('text/plain');
     const item = ingList.find(i => i.id === ingId);
     if (!item || cookingState !== 'idle') return;
     setStationContents(prev => {
@@ -244,19 +233,18 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
   };
 
   const removeFromStation = (stKey, ingId) => {
-    if (cookingState !== 'idle') return;
-    playAudio('step');
+    if (cookingState !== 'idle') return; playAudio('step');
     setStationContents(p => ({ ...p, [stKey]: p[stKey].filter(x => x.id !== ingId) }));
   };
 
   const startCooking = (stKey) => {
     if (stationContents[stKey].length === 0) return;
     setActiveStation(stKey); setCookingState('cooking'); setCookTime(0); playAudio('coin');
-    const maxLimit = stKey === 'bowl' ? 5 : 30;
+    const limit = stKey === 'bowl' ? 5 : 30;
     timerRef.current = setInterval(() => {
       setCookTime(prev => {
         const next = prev + 0.1;
-        if (next >= maxLimit) { clearInterval(timerRef.current); setCookingState('burned'); playAudio('lose'); return maxLimit; }
+        if (next >= limit) { clearInterval(timerRef.current); setCookingState('burned'); playAudio('lose'); return limit; }
         return next;
       });
     }, 100);
@@ -282,12 +270,52 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
       }
     }
 
-    if (stKey === 'bowl') {
-      playAudio('heal'); setCurrentResult({ title: '🥗 Rastgele Salata', desc: 'Malzemeler karıştırıldı ama pek bir şeye benzemedi.', color: '#3498db', slot: 'salad', icon: '🥗' }); return;
+    const sortedDropped = droppedIds.filter(id => id !== 'tuz').sort().join(',');
+    const weirdMap = {
+      'domates,sut': { title: '🍲 Kesilmiş Domatesli Süt', desc: 'Sütün asidi domatesle birleşince kesildi, pembe ve pürüzlü tuhaf bir sıvı.', color: '#e67e22', slot: 'soup', icon: '🍲' },
+      'kiyma,tavuk': { title: '🥩 Çift Et Sote', desc: 'Hem kırmızı et hem beyaz et aynı tavada! Aşırı protein yüklü gövde gösterisi.', color: '#c0392b', slot: 'main', icon: '🥩' },
+      'kola,sut': { title: '🧪 Asitli Süt Çürüğü', desc: 'Kolanın asidi sütü anında çürüttü. Kimya deneyi gibi, içilmesi tehlikeli.', color: '#8e44ad', slot: 'drink', icon: '🧪' }
+    };
+
+    if (weirdMap[sortedDropped]) { playAudio('heal'); setCurrentResult(weirdMap[sortedDropped]); return; }
+
+    if (stKey === 'juicer') {
+      const fruits = ['elma', 'portakal', 'limon', 'cilek'];
+      const nonFruits = droppedIds.filter(id => !fruits.includes(id));
+      if (nonFruits.length > 0) {
+        playAudio('lose'); const badItem = ingList.find(i => i.id === nonFruits[0]);
+        setCurrentResult({ title: `🩸 Sıkılmış Çiğ ${badItem.name} Suyu`, desc: `Meyve yerine ${badItem.name.toLowerCase()} attığınız için posası çıkmış korkunç bir sıvı elde ettiniz.`, color: '#c0392b', slot: 'drink', icon: '🧃' }); return;
+      } else {
+        playAudio('win'); setCurrentResult({ title: '🥤 Karışık Taze Meyve Suyu', desc: 'Sıkacakta harmanlanan doğal meyve kürü.', color: '#f1c40f', slot: 'drink', icon: '🥤' }); return;
+      }
     }
 
-    // Basit mantık kontrolü (Tek malzeme pişirme vb. uzun tutmamak için kısaltıldı)
-    playAudio('lose'); setCurrentResult({ title: '🍲 Özgün Bulamaç', desc: 'Tuhaf bir karışım oldu.', color: '#e74c3c', slot: 'main', icon: '🍲' });
+    const baseIngredients = droppedIds.filter(id => id !== 'tuz');
+    const hasWater = droppedIds.includes('su');
+    const hasLiquid = hasWater || droppedIds.includes('zeytinyagi') || droppedIds.includes('sut');
+    const solids = baseIngredients.filter(id => !['su', 'zeytinyagi', 'sut'].includes(id));
+
+    if (solids.length === 1) {
+      const solidId = solids[0]; const item = ingList.find(i => i.id === solidId);
+      const burnables = ['makarna', 'pirinc', 'mercimek', 'fasulye', 'un', 'seker', 'salca'];
+      if (burnables.includes(solidId) && !hasLiquid) {
+        playAudio('lose'); setCurrentResult({ title: `🔥 Kömür Olmuş ${item.name}`, desc: `Sıvı eklemeden sadece ${item.name.toLowerCase()} pişirmeye çalıştığınız için tamamen yanıp kömür oldu.`, color: '#e74c3c', slot: 'main', icon: '🔥' }); return;
+      }
+
+      let dynTitle = ''; let dynDesc = ''; let dynSlot = 'main';
+      if (solidId === 'ekmek') {
+        if (stKey === 'pot' && !hasWater) { dynTitle = '🔥 Kavrulmuş Kuru Ekmek'; dynDesc = 'Tencereye su koymadan boş metalde yaktın.'; }
+        else if (stKey === 'pot' && hasWater) { dynTitle = '🍲 Suda Dağılmış Islak Ekmek'; dynDesc = 'Ekmek suyu çekip vıcık vıcık hamur oldu.'; dynSlot = 'soup'; }
+        else { dynTitle = '✨ 🥖 Kızarmış Ekmek'; dynDesc = 'Çıtır ekmek dilimi.'; dynSlot = 'salad'; }
+      } else if (['kola', 'ayran'].includes(solidId)) {
+        dynTitle = `🔥 Ilıtılmış ${item.name}`; dynDesc = 'Hazır içeceği ateşe koyup gereksizce ısıttın ve tadını bozdun.'; dynSlot = 'drink';
+      } else {
+        dynTitle = `✨ ${item.icon} Sade Pişmiş ${item.name}`;
+        dynDesc = stKey === 'pan' ? `Tavada sote ${item.name.toLowerCase()}.` : stKey === 'pot' ? `Haşlama ${item.name.toLowerCase()}.` : `Fırın ${item.name.toLowerCase()}.`;
+      }
+      playAudio('heal'); setCurrentResult({ title: dynTitle, desc: dynDesc, color: '#3498db', slot: dynSlot, icon: item.icon }); return;
+    }
+    playAudio('lose'); setCurrentResult({ title: '🍲 Özgün Bulamaç Denemesi', desc: 'Malzemelerin kombinasyonu mantıksız oldu. Tuhaf bir tat bıraktı.', color: '#e74c3c', slot: 'main', icon: '🍲' });
   };
 
   const handlePutToTray = () => {
@@ -298,25 +326,29 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
     setStationContents({ pan: [], pot: [], oven: [], juicer: [], bowl: [] }); setCookingState('idle'); setCurrentResult(null);
   };
 
-  const maxTime = activeStation === 'bowl' ? 5 : 30;
-  const safeTime = activeStation === 'bowl' ? 3 : 20;
-
-  const getProgressColor = () => { 
-    if (cookTime < (maxTime/3)) return '#f1c40f'; 
-    if (cookTime <= safeTime) return '#2ecc71'; 
-    return '#e74c3c'; 
+  const handleDirectDropToTray = (e) => {
+    const ingId = e.dataTransfer.getData('text/plain');
+    if (['kola', 'ayran'].includes(ingId)) {
+        e.preventDefault(); const item = ingList.find(i => i.id === ingId); playAudio('win');
+        setGlobalTray(prev => ({ ...prev, drink: { title: `🧊 Buz Gibi ${item.name}`, desc: 'Dolaptan yeni çıkmış serinletici.', color: '#3498db', slot: 'drink', icon: item.icon } }));
+        setIsEaten(false); setWashResetKey(k => k + 1);
+    }
   };
+
+  const limit = activeStation === 'bowl' ? 5 : 30;
+  const safe = activeStation === 'bowl' ? 3 : 20;
+  const getProgressColor = () => { if (cookTime < (limit/3)) return '#f1c40f'; if (cookTime <= safe) return '#2ecc71'; return '#e74c3c'; };
 
   return (
     <div className="rpg-box" style={{ marginTop: '15px', padding: '12px', maxWidth: '480px', margin: '15px auto 0', textAlign: 'left' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-        <span style={{ color: '#f1c40f', fontWeight: 'bold' }}>🧑‍🍳 MUTFAK TEZGÂHI</span>
+        <span style={{ color: '#f1c40f', fontWeight: 'bold' }}>🧑‍🍳 YAŞAM & MUTFAK SİM</span>
         <button onClick={() => setShowRecipes(!showRecipes)} className="rpg-btn" style={{ background: '#2980b9' }}>📖 Tarif Kitabı</button>
       </div>
 
       {showRecipes && (
         <div style={{ background: '#000', padding: '8px', borderRadius: '6px', marginBottom: '10px', maxHeight: '110px', overflowY: 'auto', fontSize: '0.65rem', border: '1px solid #444' }}>
-          <div style={{color:'#ffcc00', marginBottom:'3px'}}>* Kase (Salata) 3-5 sn, diğerleri 20-30 sn arasında alınmalıdır.</div>
+          <div style={{color:'#ffcc00', marginBottom:'3px'}}>* Kase 3-5 sn, diğerleri 20-30 sn arasında alınmalıdır.<br/>* Kola ve Ayran doğrudan Tepsiye sürüklenebilir.</div>
           {recipesList.map((r, idx) => (<div key={idx} style={{color:'#bbb'}}>{r.i} <b>{r.n}</b> ({r.s}): {r.req.join(', ')}</div>))}
         </div>
       )}
@@ -335,9 +367,9 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
           </div>
 
           <div style={{ flex: 1.3, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            {[['pan','🍳 Tava'], ['pot','🍲 Tencere'], ['oven','🎛️ Fırın'], ['bowl','🥗 Kase (Salata)']].map(([stKey, label]) => (
+            {[['pan','🍳 Tava'], ['pot','🍲 Tencere'], ['oven','🎛️ Fırın'], ['juicer','🗜️ Sıkacak'], ['bowl','🥗 Kase (Salata)']].map(([stKey, label]) => (
               <div key={stKey} onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, stKey)} className="cook-station">
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: stKey==='bowl'?'#2ecc71':'#f1c40f', marginBottom: '2px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: stKey==='juicer'||stKey==='bowl'?'#2ecc71':'#f1c40f', marginBottom: '2px' }}>
                   <span>{label}</span>
                   {stationContents[stKey].length > 0 && <button onClick={() => startCooking(stKey)} style={{ background: '#e67e22', border: 'none', color: '#fff', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize:'0.7rem', padding:'2px 6px' }}>{stKey==='bowl'?'🥗 Karıştır':'🔥 Pişir'}</button>}
                 </div>
@@ -350,15 +382,15 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
         </div>
       ) : cookingState === 'cooking' ? (
         <div style={{ textAlign: 'center', padding: '20px 0' }}>
-          <div style={{ fontSize: '3rem', animation: cookTime >= safeTime ? 'shake 0.3s infinite' : 'bounce 0.5s infinite' }}>{activeStation === 'pan' ? '🍳' : activeStation === 'pot' ? '🍲' : activeStation === 'oven' ? '🎛️' : '🥗'}</div>
-          <div style={{ color: cookTime >= safeTime ? '#2ecc71' : '#f1c40f', fontWeight: 'bold', margin: '8px 0' }}>{cookTime < safeTime ? 'İşlem devam ediyor...' : '🔥 HAZIR! AL! 🔥'}</div>
-          <div style={{ width: '100%', background: '#333', height: '16px', borderRadius: '8px', overflow: 'hidden', border: '2px solid #555' }}><div style={{ width: `${(cookTime / maxTime) * 100}%`, background: getProgressColor(), height: '100%' }} /></div>
-          <div style={{ fontSize: '0.75rem', color: '#ccc', marginTop: '4px' }}>{cookTime.toFixed(1)} / {maxTime}.0 Saniye</div>
-          <button onClick={takeFood} disabled={cookTime < safeTime} className="rpg-btn" style={{ marginTop: '10px', width: '80%', padding: '10px', background: cookTime >= safeTime ? '#27ae60' : '#555' }}>🍽️ {cookTime < safeTime ? 'BEKLE...' : 'AL'}</button>
+          <div style={{ fontSize: '3rem', animation: cookTime >= safe ? 'shake 0.3s infinite' : 'bounce 0.5s infinite' }}>{activeStation === 'pan' ? '🍳' : activeStation === 'pot' ? '🍲' : activeStation === 'oven' ? '🎛️' : activeStation === 'juicer' ? '🗜️' : '🥗'}</div>
+          <div style={{ color: cookTime >= safe ? '#2ecc71' : '#f1c40f', fontWeight: 'bold', margin: '8px 0' }}>{cookTime < safe ? 'İşlem devam ediyor...' : '🔥 HAZIR! YANMADAN AL! 🔥'}</div>
+          <div style={{ width: '100%', background: '#333', height: '16px', borderRadius: '8px', overflow: 'hidden', border: '2px solid #555' }}><div style={{ width: `${(cookTime / limit) * 100}%`, background: getProgressColor(), height: '100%' }} /></div>
+          <div style={{ fontSize: '0.75rem', color: '#ccc', marginTop: '4px' }}>{cookTime.toFixed(1)} / {limit}.0 Saniye</div>
+          <button onClick={takeFood} disabled={cookTime < safe} className="rpg-btn" style={{ marginTop: '10px', width: '80%', padding: '10px', background: cookTime >= safe ? '#27ae60' : '#555' }}>🍽️ {cookTime < safe ? 'BEKLE...' : 'ATEŞTEN AL'}</button>
         </div>
       ) : cookingState === 'burned' ? (
         <div style={{ textAlign: 'center', padding: '15px 0' }}>
-          <div style={{ fontSize: '3.5rem' }}>{activeStation === 'bowl' ? '🥬' : '🔥'}</div><h3 style={{ color: '#e74c3c', margin: '5px 0' }}>{activeStation === 'bowl' ? 'ÇOK KARIŞTIRDIN!' : 'KÖMÜR OLDU!'}</h3>
+          <div style={{ fontSize: '3.5rem' }}>🔥</div><h3 style={{ color: '#e74c3c', margin: '5px 0' }}>KÖMÜR OLDU!</h3>
           <button onClick={() => { setStationContents({ pan: [], pot: [], oven: [], juicer: [], bowl: [] }); setCookingState('idle'); }} className="rpg-btn" style={{ background: '#c0392b' }}>🔄 Tezgâhı Temizle</button>
         </div>
       ) : (
@@ -373,8 +405,7 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
         </div>
       )}
 
-      {/* --- GLOBAL SERVİS TEPSİSİ GÖRÜNÜMÜ --- */}
-      <div style={{ marginTop: '18px', borderTop: '2px dashed #444', paddingTop: '12px', background: 'rgba(0,0,0,0.2)', borderRadius:'8px' }}>
+      <div onDragOver={(e) => e.preventDefault()} onDrop={handleDirectDropToTray} style={{ marginTop: '18px', borderTop: '2px dashed #444', paddingTop: '12px', background: 'rgba(0,0,0,0.2)', borderRadius:'8px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', padding:'0 5px' }}>
           <span style={{ color: '#ffcc00', fontWeight: 'bold', fontSize: '0.8rem' }}>🍱 HAZIRLANAN TEPSİ</span>
         </div>
@@ -389,21 +420,19 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
   );
 };
 
-// --- MİNİ OYUN 1.5: AKŞAM YEMEĞİ VE AKILLI BULAŞIK SİMÜLATÖRÜ ---
+// --- AKŞAM YEMEĞİ VE AKILLI BULAŞIK ---
 const DinnerGame = ({ globalTray, isEaten, setIsEaten, washResetKey }) => {
   const hasFood = globalTray.soup || globalTray.salad || globalTray.main || globalTray.drink;
   const [dishes, setDishes] = useState([]);
   const [machineStatus, setMachineStatus] = useState('idle');
 
   useEffect(() => {
-    // Sadece yenen/içilen şeylerin bulaşığını çıkar (Akıllı Sistem)
-    let newDishes = [];
-    if (globalTray.soup) newDishes.push({ id: 'd1', state: 'dirty', icon: '🥣', name: 'Çorba Kasesi' });
-    if (globalTray.salad) newDishes.push({ id: 'd2', state: 'dirty', icon: '🥗', name: 'Salata Kasesi' });
-    if (globalTray.main) newDishes.push({ id: 'd3', state: 'dirty', icon: '🍽️', name: 'Yemek Tabağı' });
-    if (globalTray.drink) newDishes.push({ id: 'd4', state: 'dirty', icon: '🥤', name: 'Bardak' });
-    setDishes(newDishes);
-    setMachineStatus('idle');
+    let d = [];
+    if (globalTray.soup) d.push({ id: 'd1', state: 'dirty', icon: '🥣', name: 'Kase' });
+    if (globalTray.salad) d.push({ id: 'd2', state: 'dirty', icon: '🥗', name: 'Salata Tabağı' });
+    if (globalTray.main) d.push({ id: 'd3', state: 'dirty', icon: '🍽️', name: 'Tabak' });
+    if (globalTray.drink) d.push({ id: 'd4', state: 'dirty', icon: '🥤', name: 'Bardak' });
+    setDishes(d); setMachineStatus('idle');
   }, [washResetKey, globalTray]);
 
   const handleEat = () => { playAudio('win'); setIsEaten(true); };
@@ -420,71 +449,52 @@ const DinnerGame = ({ globalTray, isEaten, setIsEaten, washResetKey }) => {
     }
   };
 
-  const startMachine = () => {
-    playAudio('heal'); setMachineStatus('running');
-    setTimeout(() => { playAudio('win'); setMachineStatus('done'); }, 4000);
-  };
-
+  const startMachine = () => { playAudio('heal'); setMachineStatus('running'); setTimeout(() => { playAudio('win'); setMachineStatus('done'); }, 4000); };
   const allLoaded = dishes.every(d => d.state === 'loaded');
 
-  if (!hasFood) return <div className="rpg-box" style={{ padding: '20px', marginTop: '15px', textAlign: 'center', color: '#e74c3c' }}>Açsın! Tepside hiçbir şey yok. Yemek ya da kahve hazırlamalısın.</div>;
+  if (!hasFood) return <div className="rpg-box" style={{ padding: '20px', marginTop: '15px', textAlign: 'center', color: '#e74c3c' }}>Açsın! Tepside hiçbir şey yok. Önce mutfakta yemek yapmalısın.</div>;
 
   if (!isEaten) {
     return (
       <div className="rpg-box" style={{ padding: '15px', marginTop: '15px' }}>
-        <h3 style={{ color: '#f1c40f', textAlign: 'center' }}>Lezzet Tepsisi</h3>
+        <h3 style={{ color: '#f1c40f', textAlign: 'center' }}>Akşam Yemeği Tepsisi</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px', margin: '15px 0' }}>
           <div className="tray-slot" style={{ borderColor: globalTray.soup ? '#2ecc71' : '#444' }}><div style={{fontSize:'2rem'}}>{globalTray.soup ? globalTray.soup.icon : '▫️'}</div></div>
           <div className="tray-slot" style={{ borderColor: globalTray.salad ? '#2ecc71' : '#444' }}><div style={{fontSize:'2rem'}}>{globalTray.salad ? globalTray.salad.icon : '▫️'}</div></div>
           <div className="tray-slot" style={{ borderColor: globalTray.main ? '#2ecc71' : '#444' }}><div style={{fontSize:'2rem'}}>{globalTray.main ? globalTray.main.icon : '▫️'}</div></div>
           <div className="tray-slot" style={{ borderColor: globalTray.drink ? '#2ecc71' : '#444' }}><div style={{fontSize:'2rem'}}>{globalTray.drink ? globalTray.drink.icon : '▫️'}</div></div>
         </div>
-        <button onClick={handleEat} className="rpg-btn" style={{ width: '100%', padding: '15px', fontSize: '1.2rem', background: '#e67e22' }}>🍽️ YEMEĞİ / İÇECEĞİ TÜKET</button>
+        <button onClick={handleEat} className="rpg-btn" style={{ width: '100%', padding: '15px', fontSize: '1.2rem', background: '#e67e22' }}>🍽️ YEMEĞİ TÜKET</button>
       </div>
     );
   }
 
   return (
     <div className="rpg-box" style={{ padding: '15px', marginTop: '15px' }}>
-      <h3 style={{ color: '#3498db', textAlign: 'center', marginBottom: '5px' }}>🧽 Akıllı Bulaşık Sistemi</h3>
-      <p style={{ fontSize: '0.75rem', color: '#ccc', textAlign: 'center', marginBottom: '15px' }}>Sadece kullandığın bulaşıklar belirdi. Önce musluğa (🚰), sonra makineye (🧼).</p>
-      
+      <h3 style={{ color: '#3498db', textAlign: 'center', marginBottom: '5px' }}>🧽 Akıllı Bulaşık Görevi</h3>
+      <p style={{ fontSize: '0.75rem', color: '#ccc', textAlign: 'center', marginBottom: '15px' }}>Sadece yediğin kaplar çıktı. Muslukta (🚰) yıka, Makineye (🧼) diz.</p>
       {machineStatus === 'idle' && (
         <>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px', minHeight: '60px' }}>
             {dishes.filter(d => d.state !== 'loaded').map(dish => (
-              <div key={dish.id} draggable onDragStart={(e) => e.dataTransfer.setData('text/plain', dish.id)} className="dish-item" style={{ filter: dish.state === 'dirty' ? 'sepia(1) hue-rotate(30deg) brightness(0.7)' : 'none', border: dish.state === 'rinsed' ? '2px solid #3498db' : '2px solid #8B4513' }} title={dish.name}>
-                {dish.icon}
-              </div>
+              <div key={dish.id} draggable onDragStart={(e) => e.dataTransfer.setData('text/plain', dish.id)} className="dish-item" style={{ filter: dish.state === 'dirty' ? 'sepia(1) hue-rotate(30deg) brightness(0.7)' : 'none', border: dish.state === 'rinsed' ? '2px solid #3498db' : '2px solid #8B4513' }} title={dish.name}>{dish.icon}</div>
             ))}
-            {dishes.filter(d => d.state !== 'loaded').length === 0 && <div style={{ color: '#2ecc71', fontSize: '0.9rem', alignSelf: 'center' }}>Tezgahta bulaşık kalmadı!</div>}
+            {dishes.filter(d => d.state !== 'loaded').length === 0 && <div style={{ color: '#2ecc71', fontSize: '0.9rem', alignSelf: 'center' }}>Bulaşık kalmadı!</div>}
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <div className="wash-station" onDragOver={e=>e.preventDefault()} onDrop={e=>handleWashDrop(e, 'tap')} style={{ flex: 1, borderColor: '#3498db' }}>🚰</div>
+            <div className="wash-station" onDragOver={e=>e.preventDefault()} onDrop={e=>handleWashDrop(e, 'tap zone')} style={{ flex: 1, borderColor: '#3498db' }}>🚰</div>
             <div className="wash-station" onDragOver={e=>e.preventDefault()} onDrop={e=>handleWashDrop(e, 'machine')} style={{ flex: 1, borderColor: '#95a5a6', position: 'relative' }}>🧼</div>
           </div>
           {allLoaded && <button onClick={startMachine} className="rpg-btn" style={{ width: '100%', marginTop: '15px', background: '#2980b9', padding: '10px' }}>⚡ MAKİNEYİ ÇALIŞTIR</button>}
         </>
       )}
-
-      {machineStatus === 'running' && (
-        <div style={{ textAlign: 'center', padding: '20px 0' }}>
-          <div style={{ fontSize: '4rem', animation: 'shake 0.2s infinite' }}>🧼</div>
-          <div style={{ color: '#3498db', fontWeight: 'bold', marginTop: '15px' }}>Makine Yıkıyor... Su Sesleri... 🌊</div>
-        </div>
-      )}
-
-      {machineStatus === 'done' && (
-        <div style={{ textAlign: 'center', padding: '20px 0' }}>
-          <div style={{ fontSize: '4rem', filter: 'drop-shadow(0 0 20px #2ecc71)' }}>✨🍽️✨</div>
-          <h3 style={{ color: '#2ecc71', marginTop: '15px' }}>Bulaşıklar Tertemiz!</h3>
-        </div>
-      )}
+      {machineStatus === 'running' && <div style={{ textAlign: 'center', padding: '20px 0' }}><div style={{ fontSize: '4rem', animation: 'shake 0.2s infinite' }}>🧼</div><div style={{ color: '#3498db', fontWeight: 'bold', marginTop: '15px' }}>Makine Yıkıyor...</div></div>}
+      {machineStatus === 'done' && <div style={{ textAlign: 'center', padding: '20px 0' }}><div style={{ fontSize: '4rem', filter: 'drop-shadow(0 0 20px #2ecc71)' }}>✨🍽️✨</div><h3 style={{ color: '#2ecc71', marginTop: '15px' }}>Tertemiz!</h3></div>}
     </div>
   );
 };
 
-// --- MİNİ OYUN 2: EKSİKSİZ 15 BÖLÜMLÜK RPG ZİNDAN ---
+// --- RPG ZİNDAN + SANDIK YÜZDELİKLERİ (ESKİ HALİYLE) ---
 const GameCenter = () => {
   const [tab, setTab] = useState('battle');
   const initP = { hp: 100, maxHp: 100, atk: 16, def: 5, lvl: 1, xp: 0, maxXp: 40, gold: 80, pot: 2, pts: 3, s: 0, v: 0, d: 0 };
@@ -538,18 +548,13 @@ const GameCenter = () => {
     } else { setEn(x => ({ ...x, hp: nextEnHp })); setLog(`${dmg} hasar vurdun!`); enTurn(p.hp); }
   };
 
-  const heal = () => {
-    if (tState !== 'player' || p.pot <= 0 || p.hp >= p.maxHp) return; playAudio('heal');
-    const hHp = Math.min(p.maxHp, p.hp + 50); setP(x => ({ ...x, hp: hHp, pot: x.pot - 1 })); setLog('İksir kullandın (+50 HP)'); enTurn(hHp);
-  };
-
-  const hardReset = () => { playAudio('lose'); setP(initP); setEq({ w: null, a: null }); setStg(1); setRevives(1); setLog('Her şey sıfırlandı. Bölüm 1.'); spawnEn(1); };
+  const heal = () => { if (tState !== 'player' || p.pot <= 0 || p.hp >= p.maxHp) return; playAudio('heal'); const hHp = Math.min(p.maxHp, p.hp + 50); setP(x => ({ ...x, hp: hHp, pot: x.pot - 1 })); setLog('İksir kullandın (+50 HP)'); enTurn(hHp); };
+  const hardReset = () => { playAudio('lose'); setP(initP); setEq({ w: null, a: null }); setStg(1); setRevives(1); setLog('Sıfırlandı. Bölüm 1.'); spawnEn(1); };
   const revive = () => { playAudio('heal'); setRevives(0); setP(x => ({ ...x, hp: x.maxHp })); setLog('Peri Gözyaşı seni hayata döndürdü.'); spawnEn(stg); };
 
   const buyBox = () => {
     if (p.gold < 50) return; playAudio('coin'); setP(x => ({ ...x, gold: x.gold - 50 }));
-    const r = Math.random() * 100;
-    let d;
+    const r = Math.random() * 100; let d;
     if (r <= 60) d = { name: 'Eski Hançer', t: 'w', v: 8, icon: '🗡️', color: '#95a5a6', rarity: 'Yaygın' };
     else if (r <= 80) d = { name: 'Deri Zırh', t: 'a', v: 12, icon: '🦺', color: '#2ecc71', rarity: 'Sıra Dışı' };
     else if (r <= 90) d = { name: 'Çelik Kılıç', t: 'w', v: 22, icon: '⚔️', color: '#3498db', rarity: 'Nadir' };
@@ -562,25 +567,10 @@ const GameCenter = () => {
     if (r > 96) playAudio('win');
   };
 
-  const groupedInv = inv.reduce((acc, item) => {
-    const existing = acc.find(i => i.name === item.name);
-    if (existing) existing.count += 1; else acc.push({...item, count: 1});
-    return acc;
-  }, []);
-
+  const groupedInv = inv.reduce((acc, item) => { const ex = acc.find(i => i.name === item.name); if (ex) ex.count += 1; else acc.push({...item, count: 1}); return acc; }, []);
   const equipGroup = (itemName) => {
-    const actualItemIndex = inv.findIndex(i => i.name === itemName);
-    if (actualItemIndex === -1) return;
-    const actualItem = inv[actualItemIndex];
-    playAudio('coin');
-    setEq(prev => {
-        const currentEquipped = prev[actualItem.t];
-        let nextInv = [...inv];
-        nextInv.splice(actualItemIndex, 1);
-        if (currentEquipped) nextInv.push(currentEquipped);
-        setInv(nextInv);
-        return { ...prev, [actualItem.t]: actualItem };
-    });
+    const idx = inv.findIndex(i => i.name === itemName); if (idx === -1) return; const item = inv[idx]; playAudio('coin');
+    setEq(prev => { const cur = prev[item.t]; let next = [...inv]; next.splice(idx, 1); if (cur) next.push(cur); setInv(next); return { ...prev, [item.t]: item }; });
   };
 
   return (
@@ -596,15 +586,13 @@ const GameCenter = () => {
 
       {tab === 'battle' && (
         <div>
-          <div style={{ background: '#222', padding: '10px', borderRadius: '8px', marginBottom: '8px' }}>
-            <div style={{ fontSize: '3.5rem' }}>{en.i}</div><div style={{ color: '#f39c12', fontWeight: 'bold' }}>{en.name} ({en.hp} HP)</div>
-          </div>
+          <div style={{ background: '#222', padding: '10px', borderRadius: '8px', marginBottom: '8px' }}><div style={{ fontSize: '3.5rem' }}>{en.i}</div><div style={{ color: '#f39c12', fontWeight: 'bold' }}>{en.name} ({en.hp} HP)</div></div>
           <div style={{ fontSize: '0.75rem', color: '#ccc', marginBottom: '8px' }}>{log}</div>
           <div style={{ fontSize: '0.8rem', color: '#2ecc71', marginBottom: '8px' }}>❤️ Canın: {p.hp}/{p.maxHp} | Atk: {totAtk()}</div>
           {tState === 'player' && <div style={{ display:'flex', gap:'6px' }}><button onClick={hit} className="rpg-btn" style={{flex:2, background:'#c0392b'}}>⚔️ SALDIR</button><button onClick={heal} className="rpg-btn" style={{flex:1, background:'#27ae60'}}>🧪 İKSİR ({p.pot})</button></div>}
           {tState === 'won' && stg < 15 && <button onClick={() => { setStg(s=>s+1); spawnEn(stg+1); }} className="rpg-btn" style={{width:'100%', background:'#f39c12'}}>SONRAKİ BÖLÜM ➡️</button>}
           {tState === 'won' && stg === 15 && <div style={{color:'#f1c40f', fontWeight:'bold'}}>🏆 15 BÖLÜM BİTTİ! TEBRİKLER! 🏆</div>}
-          {tState === 'dead' && (revives > 0 ? <button onClick={revive} className="rpg-btn" style={{width:'100%', background:'#27ae60'}}>🧚‍♀️ DİRİL (Tek Hakkın)</button> : <button onClick={hardReset} className="rpg-btn" style={{width:'100%', background:'#c0392b'}}>💀 SIFIRLA VE BAŞTAN BAŞLA</button>)}
+          {tState === 'dead' && (revives > 0 ? <button onClick={revive} className="rpg-btn" style={{width:'100%', background:'#27ae60'}}>🧚‍♀️ DİRİL</button> : <button onClick={hardReset} className="rpg-btn" style={{width:'100%', background:'#c0392b'}}>💀 SIFIRLA VE BAŞLA</button>)}
         </div>
       )}
 
@@ -613,25 +601,22 @@ const GameCenter = () => {
           <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'5px', marginBottom:'12px' }}>
             {[['STR','s',p.s], ['VIT','v',p.v], ['DEF','d',p.d]].map(([lbl,key,val]) => (<div key={key} style={{background:'#222', padding:'6px', borderRadius:'4px', textAlign:'center'}}><b>{lbl}: {val}</b><br/><button onClick={()=>addStat(key)} disabled={p.pts<=0} className="stat-btn" style={{marginTop:'4px', marginLeft:'auto', marginRight:'auto'}}>+</button></div>))}
           </div>
-          <div style={{color:'#f1c40f', marginBottom:'4px'}}>🛡️ Kuşanılmış Ekipmanlar:</div>
-          <div style={{display:'flex', gap:'8px', marginBottom:'12px'}}>
-            <div style={{background:'#222', padding:'6px', borderRadius:'4px', flex:1}}>Silah: {eq.w ? `${eq.w.icon} ${eq.w.name}` : 'Yok'}</div>
-            <div style={{background:'#222', padding:'6px', borderRadius:'4px', flex:1}}>Zırh: {eq.a ? `${eq.a.icon} ${eq.a.name}` : 'Yok'}</div>
-          </div>
+          <div style={{color:'#f1c40f', marginBottom:'4px'}}>🛡️ Kuşanılanlar:</div>
+          <div style={{display:'flex', gap:'8px', marginBottom:'12px'}}><div style={{background:'#222', padding:'6px', borderRadius:'4px', flex:1}}>Silah: {eq.w ? `${eq.w.icon} ${eq.w.name}` : 'Yok'}</div><div style={{background:'#222', padding:'6px', borderRadius:'4px', flex:1}}>Zırh: {eq.a ? `${eq.a.icon} ${eq.a.name}` : 'Yok'}</div></div>
           <div style={{color:'#bbb', marginBottom:'4px'}}>🎒 Çantadakiler:</div>
-          <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', padding:'5px 0' }}>
-            {groupedInv.map(g => (
-              <div key={g.name} onClick={() => equipGroup(g.name)} className="item-slot" style={{borderColor: g.color}} title={`${g.name} (+${g.v})`}>
-                {g.icon}
-                {g.count > 1 && <span style={{position:'absolute', bottom:'-6px', right:'-6px', background:'#e74c3c', color:'#fff', fontSize:'0.55rem', padding:'2px 5px', borderRadius:'10px', fontWeight:'bold', border:'1px solid #111'}}>x{g.count}</span>}
-              </div>
-            ))}
-          </div>
+          <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', padding:'5px 0' }}>{groupedInv.map(g => (<div key={g.name} onClick={() => equipGroup(g.name)} className="item-slot" style={{borderColor: g.color}} title={`${g.name} (+${g.v})`}>{g.icon}{g.count > 1 && <span style={{position:'absolute', bottom:'-6px', right:'-6px', background:'#e74c3c', color:'#fff', fontSize:'0.55rem', padding:'2px 5px', borderRadius:'10px', fontWeight:'bold'}}>x{g.count}</span>}</div>))}</div>
         </div>
       )}
 
       {tab === 'shop' && (
         <div style={{ textAlign: 'left', fontSize: '0.75rem', padding: '0 5px' }}>
+          <div style={{ background: '#222', padding: '10px', borderRadius: '6px', marginBottom: '12px' }}>
+            <div style={{ color: '#f1c40f', fontWeight: 'bold', marginBottom: '6px' }}>📊 Sandık Düşme Oranları</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', color: '#ccc' }}>
+              <div>⚪ Yaygın: %60</div><div>🟢 Sıra Dışı: %20</div><div>🔵 Nadir: %10</div><div>🟣 Destansı: %6</div><div>🟠 Efsanevi: %2.5</div><div>🔴 Mitik: %1.0</div>
+              <div style={{ color: '#00ffff', fontWeight: 'bold', gridColumn: 'span 2' }}>🌌 İlahi (Kalan Pay): %0.5</div>
+            </div>
+          </div>
           <button onClick={buyBox} disabled={p.gold<50} className="rpg-btn" style={{width:'100%', padding:'15px', background:'#f39c12'}}>🎁 SANDIK AÇ (50🪙)</button>
         </div>
       )}
@@ -639,34 +624,23 @@ const GameCenter = () => {
   );
 };
 
-// --- MİNİ OYUN 3: DİZİ KESİTLERİ VE YORUMLAR ---
+// --- DİZİLER VE KALICI YORUMLAR ---
 const ShowsCarousel = ({ page, setPage }) => {
-  const [comments, setComments] = useState(() => {
-    const saved = localStorage.getItem('cinema_comments_v1');
-    return saved ? JSON.parse(saved) : [[], [], []];
-  });
+  const [comments, setComments] = useState(() => { const saved = localStorage.getItem('cinema_comments_v1'); return saved ? JSON.parse(saved) : [[], [], []]; });
   const [inputVal, setInputVal] = useState('');
-
   const shows = [
-    { t: 'Vikings', q: '"İktidar, yalnızca onu almak için eğilmeye hazır olanlara verilir." — Ragnar Lothbrok', s: 'Kattegat limanında kuzgunların uçuştuğu o efsanevi sabahtan bir kesit...', c: '#1f2e3d', b: '⚔️ Savaş & Liderlik' },
-    { t: 'Frieren: Beyond Journey\'s End', q: '"İnsanların ömrü bizimki yanında bir göz açıp kapayıncaya kadar..." — Frieren', s: 'On yıllar süren serüvenin ardından eski dostun mezarı başında açan mavi çiçekler.', c: '#194a6e', b: '🪄 Huzur & Zaman' },
-    { t: 'The Mentalist', q: '"Sıradan bir gözlemci her şeyi görür, ama hiçbir şey fark etmez." — Patrick Jane', s: 'CBI ofisindeki meşhur deri koltuk ve duvarda kanla çizilmiş Red John ikonu.', c: '#5e1818', b: '☕ Gizem & Polisiye' }
+    { t: 'Vikings', q: '"İktidar, yalnızca onu almak için eğilmeye hazır olanlara verilir." — Ragnar Lothbrok', s: 'Kattegat limanında kuzgunların uçuştuğu o sabahtan bir kesit...', c: '#1f2e3d' },
+    { t: 'Frieren: Beyond Journey\'s End', q: '"İnsanların ömrü bizimki yanında bir göz açıp kapayıncaya kadar..." — Frieren', s: 'On yıllar süren serüvenin ardından eski dostun mezarı başında açan mavi çiçekler.', c: '#194a6e' },
+    { t: 'The Mentalist', q: '"Sıradan bir gözlemci her şeyi görür, ama hiçbir şey fark etmez." — Patrick Jane', s: 'CBI ofisindeki meşhur deri koltuk ve duvardaki Red John ikonu.', c: '#5e1818' }
   ];
   const cur = shows[page];
-
-  const handleAddComment = () => {
-    if (!inputVal.trim()) return; const nextCom = [...comments];
-    nextCom[page] = [...nextCom[page], { text: inputVal, date: new Date().toLocaleDateString('tr-TR') }];
-    setComments(nextCom); localStorage.setItem('cinema_comments_v1', JSON.stringify(nextCom)); setInputVal('');
-  };
+  const handleAddComment = () => { if (!inputVal.trim()) return; const n = [...comments]; n[page] = [...n[page], { text: inputVal, date: new Date().toLocaleDateString('tr-TR') }]; setComments(n); localStorage.setItem('cinema_comments_v1', JSON.stringify(n)); setInputVal(''); };
 
   return (
     <div style={{ background: cur.c, padding: '15px', borderRadius: '12px', marginTop: '15px', color: '#fff', textAlign: 'left', transition: 'background 0.4s' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-        <span style={{ fontWeight: 'bold', color: '#ffcc00', fontSize: '1.1rem' }}>📺 {cur.t}</span>
-      </div>
+      <div style={{ fontWeight: 'bold', color: '#ffcc00', fontSize: '1.1rem', marginBottom:'6px' }}>📺 {cur.t}</div>
       <div style={{ fontStyle: 'italic', fontSize: '0.85rem', marginBottom: '8px', color: '#eee' }}>{cur.q}</div>
-      <div style={{ fontSize: '0.8rem', color: '#bbb', lineHeight: '1.4', marginBottom: '12px' }}>🎞️ {cur.s}</div>
+      <div style={{ fontSize: '0.8rem', color: '#bbb', marginBottom: '12px' }}>🎞️ {cur.s}</div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
         <button onClick={() => setPage(p => p > 0 ? p - 1 : 2)} style={{ padding: '4px 10px', background: '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>⬅️ Önceki</button>
         <span style={{ fontSize: '0.8rem' }}>Yapım {page + 1} / 3</span>
@@ -675,44 +649,52 @@ const ShowsCarousel = ({ page, setPage }) => {
       <div style={{ fontSize: '0.75rem' }}>
         <div style={{ color: '#ffcc00', fontWeight: 'bold', marginBottom: '4px' }}>💬 İzleyici Yorumları ({comments[page].length})</div>
         <div style={{ maxHeight: '60px', overflowY: 'auto', marginBottom: '8px', background: 'rgba(0,0,0,0.3)', padding: '4px', borderRadius: '4px' }}>
-          {comments[page].length === 0 ? <span style={{color:'#888'}}>İlk yorumu siz ekleyin.</span> : comments[page].map((c, i) => (
-            <div key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '2px 0', color: '#ddd' }}><span style={{color:'#aaa', fontSize:'0.65rem'}}>({c.date}):</span> {c.text}</div>
-          ))}
+          {comments[page].length === 0 ? <span style={{color:'#888'}}>İlk yorumu siz ekleyin.</span> : comments[page].map((c, i) => (<div key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '2px 0', color: '#ddd' }}><span style={{color:'#aaa', fontSize:'0.65rem'}}>({c.date}):</span> {c.text}</div>))}
         </div>
-        <div style={{ display: 'flex', gap: '4px' }}>
-          <input type="text" value={inputVal} onChange={(e) => setInputVal(e.target.value)} placeholder="Yorum bırakın..." className="comment-input" />
-          <button onClick={handleAddComment} style={{ padding: '5px 10px', background: '#2ecc71', color: '#000', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>Gönder</button>
-        </div>
+        <div style={{ display: 'flex', gap: '4px' }}><input type="text" value={inputVal} onChange={(e) => setInputVal(e.target.value)} placeholder="Yorum bırakın..." className="comment-input" /><button onClick={handleAddComment} style={{ padding: '5px 10px', background: '#2ecc71', color: '#000', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>Gönder</button></div>
       </div>
     </div>
   );
 };
 
-// --- YENİ EKLENTİ: MANTIKLI RÜYA MAKİNESİ (KUZULAR İPTAL) ---
+// --- KOYUN SAYMA + RÜYA MAKİNESİ (BİRLEŞİK) ---
 const SleepSimifiers = () => {
+  const [sheepCount, setSheepCount] = useState(0);
+  const [sheepArray, setSheepArray] = useState([]);
   const [activeDream, setActiveDream] = useState(null);
 
   const dreams = [
-    { title: 'Sonsuz Bug Çözümü', icon: '💻', text: 'Saatlerce uğraştığın o hatayı rüyanda tek satır kodla çözüyorsun. Kod tıkır tıkır çalışıyor ve yeşil tik alıyor.' },
-    { title: 'Mezuniyet Günü', icon: '🎓', text: 'Baün kampüsündesin, kepini havaya fırlatıyorsun. Bütün o stresli sınavlar bitmiş, müthiş bir rahatlama hissi sarıyor.' },
-    { title: 'Projeden Tam Puan', icon: '💯', text: 'Hoca projeni inceliyor ve "Hayatımda gördüğüm en iyi React projesi, geçtin!" diyor. Huzur içinde uyumaya devam ediyorsun.' }
+    { title: 'Sonsuz Bug Çözümü', icon: '💻', text: 'Saatlerce uğraştığın o hatayı rüyanda tek satır kodla çözüyorsun. Kod tıkır tıkır çalışıyor.' },
+    { title: 'Mezuniyet Günü', icon: '🎓', text: 'Baün kampüsündesin, kepini havaya fırlatıyorsun. Bütün sınavlar bitmiş.' },
+    { title: 'Projeden Tam Puan', icon: '💯', text: 'Hoca projeni inceliyor ve "Hayatımda gördüğüm en iyi React projesi, geçtin!" diyor.' }
   ];
 
+  const triggerSheep = () => { playAudio('step'); setSheepCount(s => s + 1); setSheepArray(p => [...p, Date.now()]); setTimeout(() => setSheepArray(p => p.slice(1)), 1000); };
+
   return (
-    <div className="rpg-box" style={{padding:'15px', marginTop:'15px'}}>
-      <h3 style={{color:'#3498db', marginBottom:'10px', textAlign:'center'}}>💤 Uyku & Rüya Modu</h3>
-      <button onClick={() => { playAudio('heal'); setActiveDream(dreams[Math.floor(Math.random()*dreams.length)]); }} className="rpg-btn" style={{background:'#8e44ad', width:'100%', padding:'12px', fontSize:'1.1rem'}}>Rüyaya Dal</button>
-      {activeDream && (
-        <div style={{marginTop:'15px', padding:'15px', background:'#111', borderRadius:'8px', borderLeft:'4px solid #9b59b6', animation:'pulse 2s infinite', textAlign:'left'}}>
-          <div style={{fontSize:'1.3rem', color:'#f1c40f', marginBottom:'8px'}}>{activeDream.icon} {activeDream.title}</div>
-          <p style={{color:'#ccc', fontStyle:'italic', lineHeight:'1.5', margin: 0}}>"{activeDream.text}"</p>
+    <div style={{marginTop:'15px'}}>
+      <div className="rpg-box" style={{padding:'12px', textAlign:'center', marginBottom:'12px'}}>
+        <span style={{color:'#87CEEB', fontWeight:'bold'}}>🐑 KUZU SAYMA SİMÜLATÖRÜ</span>
+        <div style={{fontSize:'1.8rem', margin:'6px 0', color:'#f1c40f'}}>{sheepCount} Kuzu Sayıldı</div>
+        <div style={{height:'70px', borderBottom:'4px solid #654321', display:'flex', justifyContent:'center', alignItems:'flex-end', overflow:'hidden', position: 'relative'}}>
+          <div style={{ position: 'absolute', bottom: '-5px', fontSize: '2.5rem', zIndex: 2 }}>🚧</div>
+          {sheepArray.map(id => <span key={id} className="sheep-animate" style={{ zIndex: 3 }}>🐑</span>)}
         </div>
-      )}
+        <button onClick={triggerSheep} className="rpg-btn" style={{marginTop:'10px', background:'#2980b9', width:'60%', padding:'10px'}}>Çitten Kuzu Atlat</button>
+      </div>
+
+      <div className="rpg-box" style={{padding:'12px', textAlign:'left'}}>
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+          <span style={{color:'#9b59b6', fontWeight:'bold'}}>💤 RÜYA MAKİNESİ</span>
+          <button onClick={() => { playAudio('heal'); setActiveDream(dreams[Math.floor(Math.random()*dreams.length)]); }} className="rpg-btn" style={{background:'#8e44ad'}}>Rüyaya Dal</button>
+        </div>
+        {activeDream && <div style={{marginTop:'10px', background:'#111', padding:'10px', borderRadius:'6px', borderLeft:'3px solid #9b59b6'}}><div style={{fontSize:'1.2rem', color:'#f1c40f'}}>{activeDream.icon} {activeDream.title}</div><p style={{fontSize:'0.8rem', color:'#ccc', margin:'6px 0 0', fontStyle:'italic'}}>"{activeDream.text}"</p></div>}
+      </div>
     </div>
   );
 };
 
-// --- GÜNEŞ & AY SAATİ ---
+// --- SAAT ---
 const SmartClock = ({ timeString }) => {
   const [h, m] = timeString.split('-')[0].trim().split(':').map(Number);
   return (
@@ -730,23 +712,16 @@ const FadeInSection = ({ children }) => {
   return <div ref={ref} style={{ opacity: vis?1:0, transform: vis?'translateY(0)':'translateY(80px)', transition: 'all 0.8s ease-out', width: '100%', display: 'flex', justifyContent: 'center' }}>{children}</div>;
 };
 
-// --- ANA UYGULAMA ---
+// --- ANA APP ---
 const App = () => {
   const [scr, setScr] = useState(0);
   const [cinemaPage, setCinemaPage] = useState(0); 
   const [showWelcome, setShowWelcome] = useState(true);
-
-  // Global Tepsi ve Bulaşık Durumu
   const [globalTray, setGlobalTray] = useState({ soup: null, salad: null, main: null, drink: null });
   const [isEaten, setIsEaten] = useState(false);
   const [washResetKey, setWashResetKey] = useState(0);
 
-  // Yerel Dizi Fotoğrafları
-  const cinemaCovers = [
-    '/Vikings.jpg', 
-    '/Frieren.jpg', 
-    '/Mentalist.jpg'  
-  ];
+  const cinemaCovers = ['./Vikings.jpg', './Frieren.jpg', './Mentalist.jpg'];
 
   useEffect(() => { const h = () => setScr((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100); window.addEventListener('scroll', h); return () => window.removeEventListener('scroll', h); }, []);
 
@@ -763,28 +738,21 @@ const App = () => {
     <div style={{ minHeight: '550vh', fontFamily: 'sans-serif', position: 'relative', overflow: 'hidden' }}>
       <style>{cssStyles}</style>
 
-      {/* SİNEMATİK ARKAPLAN */}
       <div className="bg-layer" style={{ background: 'linear-gradient(to bottom, #FF9A8B, #FFC3A0)', opacity: getOp(1) }} />
       <div className="bg-layer" style={{ background: 'linear-gradient(to bottom, #87CEEB, #E0F6FF)', opacity: getOp(2) }} />
       <div className="bg-layer" style={{ background: 'linear-gradient(to bottom, #FF8C00, #4B0082)', opacity: getOp(3) }} />
       <div className="bg-layer" style={{ background: 'linear-gradient(to bottom, #191970, #000000)', opacity: getOp(4) }} />
 
-      {scr < 30 && <div style={{ position: 'fixed', top: '15%', right: '15%', fontSize: '6rem', zIndex: -1, animation: 'pulse 4s infinite', filter: 'drop-shadow(0 0 30px #f1c40f)' }}>☀️</div>}
+      {scr < 30 && <div style={{ position: 'fixed', top: '15%', right: '15%', fontSize: '6rem', zIndex: -1, animation: 'pulse 4s infinite' }}>☀️</div>}
       {scr > 10 && scr < 65 && <div style={{ position: 'fixed', top: '25%', left: '-20%', fontSize: '5rem', zIndex: -1, animation: 'floatCloud 40s linear infinite', opacity: 0.7 }}>☁️</div>}
-      {scr > 65 && (
-        <>
-          <div style={{ position: 'fixed', top: '15%', right: '10%', fontSize: '5rem', zIndex: -1, filter: 'drop-shadow(0 0 20px #f1c40f)', transition: 'opacity 2s', opacity: getOp(4) }}>🌙</div>
-          <div style={{ position: 'fixed', bottom: '25%', left: '20%', fontSize: '1.5rem', animation: 'firefly 5s ease-in-out infinite', zIndex: -1 }}>✨</div>
-        </>
-      )}
+      {scr > 65 && <div style={{ position: 'fixed', top: '15%', right: '10%', fontSize: '5rem', zIndex: -1, opacity: getOp(4) }}>🌙</div>}
 
-      {/* KARŞILAMA EKRANI */}
       {showWelcome && (
         <div className="welcome-overlay">
-          <h1 style={{fontSize:'3.2rem', margin:'0 0 10px 0', color:'#2ecc71', textShadow:'0 0 20px rgba(46,204,113,0.5)'}}>BEDİRHAN PORSUK</h1>
-          <h2 style={{fontWeight:'normal', color:'#ddd', textAlign:'center'}}>Günlük Yaşam & Etkileşim Simülasyonu</h2>
-          <p style={{color:'#aaa', marginBottom:'30px', textAlign:'center'}}>Balıkesir Üniversitesi - Bilgisayar Mühendisliği Dönem Projesi</p>
-          <button onClick={() => setShowWelcome(false)} style={{padding:'14px 40px', fontSize:'1.3rem', fontWeight:'bold', cursor:'pointer', background:'#27ae60', color:'#fff', border:'2px solid #2ecc71', borderRadius:'8px', boxShadow:'0 0 15px #27ae60'}}>⚡ GÜNE BAŞLA</button>
+          <h1 style={{fontSize:'3.2rem', margin:'0 0 10px 0', color:'#2ecc71'}}>BEDİRHAN PORSUK</h1>
+          <h2 style={{fontWeight:'normal', color:'#ddd', textAlign:'center'}}>Yaşam & Etkileşim Simülasyonu</h2>
+          <p style={{color:'#aaa', marginBottom:'30px'}}>Balıkesir Üniversitesi - Bilgisayar Mühendisliği Dönem Projesi</p>
+          <button onClick={() => setShowWelcome(false)} style={{padding:'14px 40px', fontSize:'1.3rem', fontWeight:'bold', cursor:'pointer', background:'#27ae60', color:'#fff', border:'none', borderRadius:'8px'}}>⚡ SİSTEMİ BAŞLAT</button>
         </div>
       )}
 
@@ -803,8 +771,7 @@ const App = () => {
                 {item.hasMorningRoutine && <MorningRoutine />}
                 {item.hasBusRight && <BusAnimation direction="right" />}
                 {item.hasBusLeft && <BusAnimation direction="left" />}
-                {item.hasNumericNote && <NumericNote />}
-                {item.hasCoffeeGame && <CoffeeGame setGlobalTray={setGlobalTray} setIsEaten={setIsEaten} setWashResetKey={setWashResetKey} />}
+                {item.hasCoffeeGame && <CoffeeGame />}
                 {item.hasKitchenGame && <KitchenGame globalTray={globalTray} setGlobalTray={setGlobalTray} setIsEaten={setIsEaten} setWashResetKey={setWashResetKey} />}
                 {item.hasDinnerGame && <DinnerGame globalTray={globalTray} isEaten={isEaten} setIsEaten={setIsEaten} washResetKey={washResetKey} />}
                 {item.hasMiniGame && <GameCenter />}
@@ -812,14 +779,7 @@ const App = () => {
                 {item.hasSleepSection && <SleepSimifiers />}
               </div>
               
-              {item.img && (
-                <img 
-                  src={item.hasShowsCarousel ? cinemaCovers[cinemaPage] : item.img} 
-                  alt={item.title} 
-                  className="glass-card" 
-                  style={{ width: '300px', height: '300px', objectFit: 'cover', borderRadius: '20px', border: '3px solid rgba(255,255,255,0.4)', transition: 'all 0.5s ease' }} 
-                />
-              )}
+              {item.img && <img src={item.hasShowsCarousel ? cinemaCovers[cinemaPage] : item.img} alt={item.title} className="glass-card" style={{ width: '300px', height: '300px', objectFit: 'cover', borderRadius: '20px', border: '3px solid rgba(255,255,255,0.4)' }} />}
             </div>
           </FadeInSection>
         ))}
