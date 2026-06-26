@@ -447,16 +447,21 @@ const DinnerGame = ({ globalTray, isEaten, setIsEaten, washResetKey }) => {
   const handleEat = () => { playAudio('win'); setIsEaten(true); };
 
   const handleWashDrop = (e, targetZone) => {
-    e.preventDefault(); const dishId = e.dataTransfer.getData('text/plain');
-    if (targetZone === 'tap') {
-      const dish = dishes.find(d => d.id === dishId);
-      if (dish && dish.state === 'dirty') { playAudio('step'); setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'rinsed' } : d)); }
-    } else if (targetZone === 'machine') {
-      const dish = dishes.find(d => d.id === dishId);
-      if (dish && dish.state === 'rinsed') { playAudio('coin'); setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'loaded' } : d)); } 
-      else if (dish && dish.state === 'dirty') alert("Önce muslukta sudan geçirmelisin!");
-    }
-  };
+  e.preventDefault();
+  const dishId = e.dataTransfer.getData('text/plain');
+  const dish = dishes.find(d => d.id === dishId);
+  if (!dish) return;
+
+  // 1. Musluk Mantığı
+  if (targetZone === 'tap' && dish.state === 'dirty') {
+    playAudio('step');
+    setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'rinsed' } : d));
+  } 
+  // 2. Makine Mantığı
+  else if (targetZone === 'machine' && dish.state === 'rinsed') {
+    playAudio('coin');
+    setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'loaded' } : d));
+  }
 
   const startMachine = () => { playAudio('heal'); setMachineStatus('running'); setTimeout(() => { playAudio('win'); setMachineStatus('done'); }, 4000); };
   const allLoaded = dishes.every(d => d.state === 'loaded');
