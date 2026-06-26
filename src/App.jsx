@@ -148,17 +148,7 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
     setStationContents(p => ({ ...p, [stKey]: p[stKey].filter(x => x.id !== ingId) }));
   };
 
-  const startCooking = (stKey) => 
-  {
-	if (stKey === 'bowl') {
-      const dropped = stationContents.bowl;
-      const isSalad = dropped.some(i => i.id === 'marul') && dropped.some(i => i.id === 'zeytinyagi');
-      setCurrentResult(isSalad 
-        ? { title: '🥗 Mevsim Salata', icon: '🥗', slot: 'salad', desc: 'Harika bir salata!', color: '#2ecc71' } 
-        : { title: '🥣 Karışık Kase', icon: '🥣', slot: 'salad', desc: 'Kasede sadece malzemeleri karıştırdın.', color: '#95a5a6' });
-      setCookingState('result');
-      return;
-    }  
+  const startCooking = (stKey) => {
     if (stationContents[stKey].length === 0) return;
     setActiveStation(stKey); setCookingState('cooking'); setCookTime(0); playAudio('coin');
     timerRef.current = setInterval(() => {
@@ -291,7 +281,7 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
           </div>
 
           <div style={{ flex: 1.3, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            {[['pan','🍳 Tava'], ['pot','🍲 Tencere'], ['oven','🎛️ Fırın'], ['juicer','🗜️ Sıkacak'],['bowl','🥣']].map(([stKey, label]) => (
+            {[['pan','🍳 Tava'], ['pot','🍲 Tencere'], ['oven','🎛️ Fırın'], ['juicer','🗜️ Sıkacak']].map(([stKey, label]) => (
               <div key={stKey} onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, stKey)} className="cook-station">
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: stKey==='juicer'?'#2ecc71':'#f1c40f', marginBottom: '2px' }}>
                   <span>{label}</span>
@@ -862,4 +852,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App; 
