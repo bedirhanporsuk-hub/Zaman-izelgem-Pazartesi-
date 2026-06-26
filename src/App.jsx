@@ -38,19 +38,19 @@ const cssStyles = `
 `;
 
 const schedule = [
-  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: 'https://avatars.mds.yandex.net/i?id=1882edf4921c08092dfdeff104c95262a077cd33-5129388-images-thumbs&n=13', hasMorningRoutine: true },
-  { id: 2, time: '09:00 - 09:45', title: 'Derse Gidiş', desc: 'Kampüse doğru sabah yolculuğu. Cam kenarından akıp giden şehir manzarası.', icon: '🚌', music: 'Yol Şarkıları', img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80', hasBusRight: true },
-  { id: 3, time: '09:45 - 12:00', title: 'Nümerik Analiz', desc: 'Günün ilk dersi. MATLAB ve teorik notlar.', icon: '📓', music: 'Akademik Odak', img: './bogazicili.jpg' }, 
-  { id: 4, time: '12:00 - 13:25', title: 'Öğle Arası', desc: 'Yemekhaneye inip pratik bir şeyler alma.', icon: '🍽️', music: 'Mola Zamanı', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80' },
-  { id: 5, time: '13:25 - 16:00', title: 'İnternet Programlama', desc: 'Web teknolojileri ve modern kodlama mimarileri üzerine çalışma.', icon: '🌐', music: 'Kodlama Modu', img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80' },
-  { id: 6, time: '16:00 - 16:45', title: 'Eve Dönüş', desc: 'Kampüse veda, kulaklığı takıp eve dönüş yoluna koyulma.', icon: '🚶‍♂️', music: 'Yol Müzikleri', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&q=80', hasBusLeft: true },
-  { id: 7, time: '17:00 - 19:00', title: 'Dinlenme Molası', desc: 'Günün yorgunluğunu atmak için kahve eşliğinde sakin dinlenme saati.', icon: '🛋️', music: 'Sakinlik', img: './Kahve.jpg', hasCoffeeGame: true },
-  { id: 8, time: '19:00 - 20:00', title: 'Mutfak Mesaisi', desc: 'Yemekleri yap ve Tepsiye diz. Yeme işlemi bir sonraki saatte!', icon: '🍳', music: 'Yemek Arka Planı', img: 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=400&q=80', hasKitchenGame: true },
-  { id: 9, time: '20:00 - 20:30', title: 'Akşam Yemeği & Temizlik', desc: 'Mutfakta hazırladığın tepsiyi burada yiyip bulaşıkları yıkayabilirsin.', icon: '🧽', music: 'Akşam Jazı', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&q=80', hasDinnerGame: true },
-  { id: 10, time: '20:30 - 22:00', title: 'Günün Tekrarı', desc: 'Okulda işlenen konuların verimli bir tekrarı.', icon: '📚', music: 'Odaklanma', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&q=80' },
-  { id: 11, time: '22:00 - 00:00', title: 'Oyun & Kafa Dağıtma', desc: '15 Bölümlük Zindan! Öldüğünde sadece 1 dirilme hakkın var.', icon: '🎮', music: 'Game OST', img: './RE2R.jpg', hasMiniGame: true },
-  { id: 12, time: '00:00 - 02:30', title: 'Gece Sineması', desc: 'Favori yapımlar ve kalıcı yorum sistemi:', icon: '🍿', music: 'Gece Modu', img: './Vikings.jpg', hasShowsCarousel: true },
-  { id: 13, time: '02:30 - 08:00', title: 'Derin Uyku & Rüyalar', desc: 'Çitten atlayan kuzular ve rüya simülatörü.', icon: '💤', music: 'Gece Sessizliği', img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80', hasSleepSection: true }
+  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: 'https://avatars.mds.yandex.net/i?id=1882edf4921c08092dfdeff104c95262a077cd33-5129388-images-thumbs&n=13', hasMorningRoutine: true, spotify: 'https://open.spotify.com/embed/track/3K4HG923w8hL923w8hL923' },
+  { id: 2, time: '09:00 - 09:45', title: 'Derse Gidiş', desc: 'Kampüse doğru sabah yolculuğu. Cam kenarından akıp giden şehir manzarası.', icon: '🚌', music: 'Yol Şarkıları', img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80', hasBusRight: true, spotify: 'https://open.spotify.com/embed/track/5u0w3P4h4h4h4h4h4h4h' },
+  { id: 3, time: '09:45 - 12:00', title: 'Nümerik Analiz', desc: 'Günün ilk dersi. MATLAB ve teorik notlar.', icon: '📓', music: 'Akademik Odak', img: './bogazicili.jpg', spotify: 'https://open.spotify.com/embed/track/2t8y4h4h4h4h4h4h4h4h' },
+  { id: 4, time: '12:00 - 13:25', title: 'Öğle Arası', desc: 'Yemekhaneye inip pratik bir şeyler alma.', icon: '🍽️', music: 'Mola Zamanı', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80', spotify: 'https://open.spotify.com/embed/track/1a2b3c4d5e6f7g8h9i0j' },
+  { id: 5, time: '13:25 - 16:00', title: 'İnternet Programlama', desc: 'Web teknolojileri ve modern kodlama mimarileri üzerine çalışma.', icon: '🌐', music: 'Kodlama Modu', img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&q=80', spotify: 'https://open.spotify.com/embed/track/0j9i8h7g6f5e4d3c2b1a' },
+  { id: 6, time: '16:00 - 16:45', title: 'Eve Dönüş', desc: 'Kampüse veda, kulaklığı takıp eve dönüş yoluna koyulma.', icon: '🚶‍♂️', music: 'Yol Müzikleri', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&q=80', hasBusLeft: true, spotify: 'https://open.spotify.com/embed/track/4h5j6k7l8m9n0o1p2q3r' },
+  { id: 7, time: '17:00 - 19:00', title: 'Dinlenme Molası', desc: 'Günün yorgunluğunu atmak için kahve eşliğinde sakin dinlenme saati.', icon: '🛋️', music: 'Sakinlik', img: './Kahve.jpg', hasCoffeeGame: true, spotify: 'https://open.spotify.com/embed/track/3a4b5c6d7e8f9g0h1i2j' },
+  { id: 8, time: '19:00 - 20:00', title: 'Mutfak Mesaisi', desc: 'Yemekleri yap ve Tepsiye diz. Yeme işlemi bir sonraki saatte!', icon: '🍳', music: 'Yemek Arka Planı', img: 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=400&q=80', hasKitchenGame: true, spotify: 'https://open.spotify.com/embed/track/9j8i7h6g5f4e3d2c1b0a' },
+  { id: 9, time: '20:00 - 20:30', title: 'Akşam Yemeği & Temizlik', desc: 'Mutfakta hazırladığın tepsiyi burada yiyip bulaşıkları yıkayabilirsin.', icon: '🧽', music: 'Akşam Jazı', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&q=80', hasDinnerGame: true, spotify: 'https://open.spotify.com/embed/track/1a2b3c4d5e6f7g8h9i0j' },
+  { id: 10, time: '20:30 - 22:00', title: 'Günün Tekrarı', desc: 'Okulda işlenen konuların verimli bir tekrarı.', icon: '📚', music: 'Odaklanma', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&q=80', spotify: 'https://open.spotify.com/embed/track/2b3c4d5e6f7g8h9i0j1k' },
+  { id: 11, time: '22:00 - 00:00', title: 'Oyun & Kafa Dağıtma', desc: '15 Bölümlük Zindan! Öldüğünde sadece 1 dirilme hakkın var.', icon: '🎮', music: 'Game OST', img: './RE2R.jpg', hasMiniGame: true, spotify: 'https://open.spotify.com/embed/track/3c4d5e6f7g8h9i0j1k2l' },
+  { id: 12, time: '00:00 - 02:30', title: 'Gece Sineması', desc: 'Favori yapımlar ve kalıcı yorum sistemi:', icon: '🍿', music: 'Gece Modu', img: './Vikings.jpg', hasShowsCarousel: true, spotify: 'https://open.spotify.com/embed/track/4d5e6f7g8h9i0j1k2l3m' },
+  { id: 13, time: '02:30 - 08:00', title: 'Derin Uyku & Rüyalar', desc: 'Çitten atlayan kuzular ve rüya simülatörü.', icon: '💤', music: 'Gece Sessizliği', img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&q=80', hasSleepSection: true, spotify: 'https://open.spotify.com/embed/track/5e6f7g8h9i0j1k2l3m4n' }
 ];
 
 // --- SES MOTORU ---
@@ -111,8 +111,12 @@ const CoffeeGame = () => {
 
   const recipes = [
     { n: 'Filtre Kahve', req: ['kahve', 'su'], icon: '☕', desc: 'Ayıltıcı sade kahve.' },
-    { n: 'Sütlü Latte', req: ['kahve', 'sut'], icon: '☕', desc: 'Yumuşak içim espresso.' },
-    { n: 'Buzlu Soğuk Kahve', req: ['kahve', 'sut', 'buz'], icon: '🥤', desc: 'Ferahlatıcı yaz kahvesi.' }
+    { n: 'Latte', req: ['kahve', 'sut'], icon: '☕', desc: 'Sıcak bir Latte.' },
+	{ n: 'Filtre Kahve', req: ['kahve', 'su','sut'], icon: '☕', desc: 'Ayıltıcı sade kahve.' }
+    { n: 'Buzlu Soğuk Kahve', req: ['kahve', 'sut', 'buz'], icon: '🥤', desc: 'Ferahlatıcı yaz kahvesi.' },
+	{ n: 'Soğuk Americano', req: ['kahve', 'su', 'buz'], icon: '🥤', desc: 'Ayıltıcı soğuk Americano.' },
+	{ n: 'Soğuk Americano', req: ['kahve', 'su', 'buz','sut'], icon: '🥤', desc: 'Ayıltıcı sade kahve.' },
+	{ n: 'Soğuk Latte', req: ['kahve', 'su', 'buz','sut'], icon: '🥤', desc: 'Buz gibi bir Latte.' }
   ];
 
   const addIng = (ing) => { if(status === 'idle' && ingredients.length < 3) { playAudio('coin'); setIngredients([...ingredients, ing]); } };
@@ -122,7 +126,7 @@ const CoffeeGame = () => {
     setTimeout(() => {
       const sorted = [...ingredients].sort().join(',');
       const found = recipes.find(r => r.req.sort().join(',') === sorted);
-      if(found) { setMyCup(found); playAudio('win'); } else { setMyCup({ n: 'Tuhaf Karışım', desc: 'Acı bir tat bıraktı.', icon: '🧪' }); playAudio('lose'); }
+      if(found) { setMyCup(found); playAudio('win'); } else { setMyCup({ n: 'kahve yandı', desc: 'Acı bir tat bıraktı.', icon: '🔥' }); playAudio('lose'); }
       setStatus('done');
     }, 4000);
   };
@@ -426,7 +430,7 @@ const DinnerGame = ({ globalTray, isEaten, setIsEaten, washResetKey }) => {
   const [dishes, setDishes] = useState([
     { id: 'd1', state: 'dirty', icon: '🍽️', name: 'Tabak' },
     { id: 'd2', state: 'dirty', icon: '🥣', name: 'Kase' },
-	{ id: 'd2', state: 'dirty', icon: '🥗', name: 'Salata Tabağı' }), 
+	{ id: 'd2', state: 'dirty', icon: '🥗', name: 'Salata Tabağı' }, 
     { id: 'd3', state: 'dirty', icon: '🥤', name: 'Bardak' }
   ]);
   const [machineStatus, setMachineStatus] = useState('idle'); // idle, running, done
@@ -436,7 +440,7 @@ const DinnerGame = ({ globalTray, isEaten, setIsEaten, washResetKey }) => {
     setDishes([
       { id: 'd1', state: 'dirty', icon: '🍽️', name: 'Tabak' },
       { id: 'd2', state: 'dirty', icon: '🥣', name: 'Kase' },
-	  { id: 'd2', state: 'dirty', icon: '🥗', name: 'Salata Tabağı' }), 
+	  { id: 'd2', state: 'dirty', icon: '🥗', name: 'Salata Tabağı' }, 
       { id: 'd3', state: 'dirty', icon: '🥤', name: 'Bardak' }
     ]);
     setMachineStatus('idle');
