@@ -789,7 +789,20 @@ const App = () => {
               <div className="glass-card" style={{ padding: '30px', borderRadius: '20px', width: '460px', textAlign: 'center', color: '#111' }}>
                 <div style={{ fontSize: '3.5rem' }}>{item.icon}</div><h2 style={{ fontSize: '2.2rem', margin: '5px 0' }}>{item.time}</h2><h3 style={{ margin: '0 0 10px 0' }}>{item.title}</h3>
                 <p style={{ margin: '0 0 15px 0', lineHeight: '1.5', fontSize: '1rem' }}>{item.desc}</p>
-                <div style={{ background: '#1db954', color: '#fff', padding: '8px 16px', borderRadius: '8px', fontWeight: 'bold', display: 'inline-block', fontSize: '0.9rem' }}>🎵 Spotify: {item.music}</div>
+                {item.spotify ? (
+                  <iframe 
+                    src={item.spotify} 
+                    width="100%" 
+                    height="80" 
+                    frameBorder="0" 
+                    style={{ borderRadius: '8px', marginTop: '10px' }}
+                    allow="encrypted-media">
+                  </iframe>
+                    ) : (
+                     <div style={{ background: '#1db954', color: '#fff', padding: '8px 16px', borderRadius: '8px', fontWeight: 'bold', display: 'inline-block', fontSize: '0.9rem', marginTop: '10px' }}>
+                       🎵 Spotify: {item.music}
+                     </div>
+                    )}
                 
                 {item.hasMorningRoutine && <MorningRoutine />}
                 {item.hasBusRight && <BusAnimation direction="right" />}
