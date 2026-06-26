@@ -423,35 +423,48 @@ const KitchenGame = ({ globalTray, setGlobalTray, setIsEaten, setWashResetKey })
 // --- AKŞAM YEMEĞİ VE AKILLI BULAŞIK ---
 const DinnerGame = ({ globalTray, isEaten, setIsEaten, washResetKey }) => {
   const hasFood = globalTray.soup || globalTray.salad || globalTray.main || globalTray.drink;
-  const [dishes, setDishes] = useState([]);
-  const [machineStatus, setMachineStatus] = useState('idle');
+  const [dishes, setDishes] = useState([
+    { id: 'd1', state: 'dirty', icon: '🍽️', name: 'Tabak' },
+    { id: 'd2', state: 'dirty', icon: '🥣', name: 'Kase' },
+	{ id: 'd2', state: 'dirty', icon: '🥗', name: 'Salata Tabağı' }), 
+    { id: 'd3', state: 'dirty', icon: '🥤', name: 'Bardak' }
+  ]);
+  const [machineStatus, setMachineStatus] = useState('idle'); // idle, running, done
 
   useEffect(() => {
-    let d = [];
-    if (globalTray.soup) d.push({ id: 'd1', state: 'dirty', icon: '🥣', name: 'Kase' });
-    if (globalTray.salad) d.push({ id: 'd2', state: 'dirty', icon: '🥗', name: 'Salata Tabağı' });
-    if (globalTray.main) d.push({ id: 'd3', state: 'dirty', icon: '🍽️', name: 'Tabak' });
-    if (globalTray.drink) d.push({ id: 'd4', state: 'dirty', icon: '🥤', name: 'Bardak' });
-    setDishes(d); setMachineStatus('idle');
-  }, [washResetKey, globalTray]);
+    // Yeni yemek geldiğinde bulaşıkları kirlet
+    setDishes([
+      { id: 'd1', state: 'dirty', icon: '🍽️', name: 'Tabak' },
+      { id: 'd2', state: 'dirty', icon: '🥣', name: 'Kase' },
+	  { id: 'd2', state: 'dirty', icon: '🥗', name: 'Salata Tabağı' }), 
+      { id: 'd3', state: 'dirty', icon: '🥤', name: 'Bardak' }
+    ]);
+    setMachineStatus('idle');
+  }, [washResetKey]);
 
-  const handleEat = () => { playAudio('win'); setIsEaten(true); };
+  const handleEat = () => {
+    playAudio('win');
+    setIsEaten(true);
+  };
 
   const handleWashDrop = (e, targetZone) => {
     e.preventDefault();
     const dishId = e.dataTransfer.getData('text/plain');
-    const dish = dishes.find(d => d.id === dishId);
-    if (!dish) return;
-
-    if (targetZone === 'tap' && dish.state === 'dirty') {
-      playAudio('step');
-      setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'rinsed' } : d));
-    } 
-    else if (targetZone === 'machine' && dish.state === 'rinsed') {
-      playAudio('coin');
-      setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'loaded' } : d));
-    } else if (targetZone === 'machine' && dish.state === 'dirty') {
-      alert("Önce muslukta sudan geçirmelisin!");
+    
+    if (targetZone === 'tap') {
+      const dish = dishes.find(d => d.id === dishId);
+      if (dish && dish.state === 'dirty') {
+        playAudio('step'); // Su sesi alternatifi
+        setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'rinsed' } : d));
+      }
+    } else if (targetZone === 'machine') {
+      const dish = dishes.find(d => d.id === dishId);
+      if (dish && dish.state === 'rinsed') {
+        playAudio('coin'); // Tabak koyma sesi
+        setDishes(prev => prev.map(d => d.id === dishId ? { ...d, state: 'loaded' } : d));
+      } else if (dish && dish.state === 'dirty') {
+        alert("Önce muslukta sudan geçirmelisin! Kirli bulaşık makineyi bozar.");
+      }
     }
   };
 
