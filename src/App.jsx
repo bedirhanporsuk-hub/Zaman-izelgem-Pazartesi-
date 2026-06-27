@@ -37,6 +37,20 @@ const cssStyles = `
   .wash-station { border: 2px dashed #666; border-radius: 8px; padding: 15px; min-height: 80px; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: #222; }
 `;
 
+import audio1 from './stardewvalley.mp3';
+import audio2 from './mytime.mp3';
+import audio3 from './d.mp3';
+import audio4 from './bossaantigua.mp3';
+import audio5 from './snowman.mp3';
+import audio6 from './chamber.mp3';
+import audio7 from './jinsang.mp3';
+import audio8 from './a.mp3';
+import audio9 from './b.mp3';
+import audio10 from './c.mp3';
+import audio11 from './re4r.mp3';
+import audio12 from './dragonsmasher.mp3';
+import audio13 from './rainsound.mp3';
+
 const schedule = [
   { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: './kahvalti.jpg', hasMorningRoutine: true, audio: '/stardewvalley.mp3' },
   { id: 2, time: '09:00 - 09:45', title: 'Derse Gidiş', desc: 'Kampüse doğru sabah yolculuğu. Cam kenarından akıp giden şehir manzarası.', icon: '🚌', music: 'Yol Şarkıları', img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80', hasBusRight: true, audio: '/mytime.mp3' },
@@ -790,9 +804,12 @@ const App = () => {
                 <div style={{ fontSize: '3.5rem' }}>{item.icon}</div><h2 style={{ fontSize: '2.2rem', margin: '5px 0' }}>{item.time}</h2><h3 style={{ margin: '0 0 10px 0' }}>{item.title}</h3>
                 <p style={{ margin: '0 0 15px 0', lineHeight: '1.5', fontSize: '1rem' }}>{item.desc}</p>
                 {item.audio ? (
-                  <audio controls style={{ width: '100%', height: '40px', marginTop: '10px', borderRadius: '8px' }}>
-                    <source src={item.audio} type="audio/mpeg" />
-                    Tarayıcın ses oynatıcıyı desteklemiyor.
+                  <audio 
+                    controls 
+                    src={item.audio} 
+                    style={{ width: '100%', height: '40px', marginTop: '10px', borderRadius: '8px' }}
+                  >
+                   Tarayıcın ses oynatıcıyı desteklemiyor.
                   </audio>
                 ) : (
                   <div style={{ background: '#1db954', color: '#fff', padding: '8px 16px', borderRadius: '8px', fontWeight: 'bold', display: 'inline-block', fontSize: '0.9rem', marginTop: '10px' }}>
