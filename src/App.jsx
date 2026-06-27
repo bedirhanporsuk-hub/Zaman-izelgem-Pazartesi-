@@ -38,7 +38,7 @@ const cssStyles = `
 `;
 
 const schedule = [
-  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: './kahvalti.jpg', hasMorningRoutine: true, audio: '/Stardew Valley OST - Spring (The Valley Comes Alive)' },
+  { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: './kahvalti.jpg', hasMorningRoutine: true, audio: '/stardewvalley.mp3' },
   { id: 2, time: '09:00 - 09:45', title: 'Derse Gidiş', desc: 'Kampüse doğru sabah yolculuğu. Cam kenarından akıp giden şehir manzarası.', icon: '🚌', music: 'Yol Şarkıları', img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80', hasBusRight: true, audio: '/mytime.mp3' },
   { id: 3, time: '09:45 - 12:00', title: 'Nümerik Analiz', desc: 'Günün ilk dersi. MATLAB ve teorik notlar.', icon: '📓', music: 'Akademik Odak', img: './bogazicili.jpg', audio: '/d.mp3' },
   { id: 4, time: '12:00 - 13:25', title: 'Öğle Arası', desc: 'Yemekhaneye inip pratik bir şeyler alma.', icon: '🍽️', music: 'Mola Zamanı', img: './yemekhane.jpg', audio: '/bossaantigua.mp3' },
