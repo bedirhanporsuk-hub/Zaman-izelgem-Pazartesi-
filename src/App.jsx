@@ -37,19 +37,19 @@ const cssStyles = `
   .wash-station { border: 2px dashed #666; border-radius: 8px; padding: 15px; min-height: 80px; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: #222; }
 `;
 
-import audio1 from './stardewvalley.mp3';
-import audio2 from './mytime.mp3';
-import audio3 from './d.mp3';
-import audio4 from './bossaantigua.mp3';
-import audio5 from './snowman.mp3';
-import audio6 from './chamber.mp3';
-import audio7 from './jinsang.mp3';
-import audio8 from './a.mp3';
-import audio9 from './b.mp3';
-import audio10 from './c.mp3';
-import audio11 from './re4r.mp3';
-import audio12 from './dragonsmasher.mp3';
-import audio13 from './rainsound.mp3';
+import audio1 from './assets/stardewvalley.mp3';
+import audio2 from './assets/mytime.mp3';
+import audio3 from './assets/d.mp3';
+import audio4 from './assets/bossaantigua.mp3';
+import audio5 from './assets/snowman.mp3';
+import audio6 from './assets/chamber.mp3';
+import audio7 from './assets/jinsang.mp3';
+import audio8 from './assets/a.mp3';
+import audio9 from './assets/b.mp3';
+import audio10 from './assets/c.mp3';
+import audio11 from './assets/re4r.mp3';
+import audio12 from './assets/dragonsmasher.mp3';
+import audio13 from './assets/rainsound.mp3';
 
 const schedule = [
   { id: 1, time: '08:00 - 09:00', title: 'Güne Başlangıç', desc: 'Uyanış, yüz yıkama, hızlı bir kahvaltı ve diş fırçalama.', icon: '🌅', music: 'Sabah Enerjisi', img: './kahvalti.jpg', hasMorningRoutine: true, audio: '/stardewvalley.mp3' },
